@@ -1,0 +1,150 @@
+﻿@model HUKUK_PROJE.Entities.Contact
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    @await Component.InvokeAsync("_HeadPartials")
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .appointment_area {
+            padding: 50px 0;
+        }
+
+        .appointment_container {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+
+        .appointment_form {
+            flex: 1;
+            padding: 20px;
+            max-width: 50%;
+        }
+
+        .map_container {
+            flex: 1;
+            padding: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            resize: vertical;
+        }
+    </style>
+</head>
+
+<body>
+    @await Component.InvokeAsync("_HeaderPartials")
+    @await Component.InvokeAsync("_BannerPartials")
+    @await Component.InvokeAsync("_AboutPartials")
+    @await Component.InvokeAsync("_ServicePartials")
+    @await Component.InvokeAsync("_EmployeeParials")
+    @await Component.InvokeAsync("_TestimonialPartials")
+
+    <div class="appointment_area">
+        <div class="container">
+            <div class="appointment_container">
+                <!-- Randevu Formu -->
+                <div class="appointment_form">
+                    <h3><strong>Randevu Al</strong></h3>
+                    <br />
+                    <form id="appointmentForm" method="post" asp-action="Create">
+                        <div class="row">
+                            <div class="col-xl-6 col-md-6">
+                                <input type="text" id="nameSurname" name="NameSurname" asp-for="NameSurname" placeholder="Ad Soyad" required>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <input type="email" id="email" name="Email" asp-for="Email" placeholder="E-posta" required>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <input type="text" id="phoneNumber" name="PhoneNumber" asp-for="PhoneNumber" placeholder="Telefon Numarası" required>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <input type="date" id="appointmentDate" name="AppointmentDate" asp-for="AppointmentDate" required>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <input type="time" id="appointmentTime" name="AppointmentTime" asp-for="AppointmentTime" min="10:00" max="18:00" required>
+                            </div>
+                            <div class="col-xl-6 col-md-6">
+                                <select id="lawType" name="LawTypeID" class="form-control" required>
+                                    <option value="">Lütfen bir kategori seçin</option>
+                                    @foreach (var item in ViewBag.v1 as List<SelectListItem>)
+                                    {
+                                        <option value="@item.Value">@item.Text</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-xl-12">
+                                <textarea id="message" name="Message" asp-for="Message" placeholder="Mesajınızı buraya yazınız..." required></textarea>
+                            </div>
+                            <div class="col-xl-12">
+                                <div class="appoinment_button">
+                                    <button type="submit" style="cursor:pointer" class="boxed-btn5">Randevu Al</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Google Maps İframe -->
+                <div class="map_container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12190.900844752408!2d29.04069721511351!3d40.19292837926967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ca3de2cae40b37%3A0x9bf6a2c5985be498!2sTophane%20Saat%20Kulesi!5e0!3m2!1str!2str!4v1743716831175!5m2!1str!2str"
+                            width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @await Component.InvokeAsync("_FooterPartials")
+    @await Component.InvokeAsync("_ScriptPartials")
+
+    <script>
+        document.getElementById("appointmentForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+
+            fetch('/Default/Create', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Randevunuz oluşturulmuştur!',
+                            text: 'Randevunuz başarıyla kaydedildi ve mail olarak gönderildi.',
+                            confirmButtonText: 'Tamam'
+                        }).then(() => {
+                            event.target.reset();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Hata!',
+                            text: 'Randevu oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.',
+                            confirmButtonText: 'Tamam'
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Hata!',
+                        text: 'Bir hata oluştu. Lütfen tekrar deneyin.',
+                        confirmButtonText: 'Tamam'
+                    });
+                });
+        });
+    </script>
+
+</body>
+</html>
