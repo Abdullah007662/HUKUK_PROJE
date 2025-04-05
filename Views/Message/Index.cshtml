@@ -4,6 +4,12 @@
     Layout = "~/Views/Admin/Index.cshtml";
 }
 
+<!-- DataTables kütüphaneleri -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<!-- SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div class="container-fluid">
@@ -12,7 +18,7 @@
             <h4 class="card-title">Mesaj Tablosu</h4>
 
             <div class="table-responsive">
-                <table class="table table-bordered">
+                <table id="messageTable" class="table table-bordered">
                     <thead class="thead-dark">
                         <tr>
                             <th>Ad Soyad</th>
@@ -31,7 +37,9 @@
                             <tr>
                                 <td>@item.NameSurname</td>
                                 <td>@item.PhoneNumber</td>
-                                <td>@item.AppointmentDate.ToString("dd - MMMM - yyyy")</td>
+                                <td data-order="@item.AppointmentDate.ToString("yyyyMMdd")">
+                                    @item.AppointmentDate.ToString("dd - MMMM - yyyy")
+                                </td>
                                 <td>@item.AppointmentTime.ToString(@"hh\:mm")</td>
                                 <td>@(item.LawTypes != null ? item.LawTypes.Type : "Bilinmiyor")</td>
                                 <td><a href="#" class="btn btn-primary">Detaylar</a></td>
@@ -48,7 +56,17 @@
     </div>
 </div>
 
+<!-- Tabloyu DataTables ile Aktifleştir -->
 <script>
+    $(document).ready(function () {
+        $('#messageTable').DataTable({
+            "order": [[2, "asc"]], // Başlangıçta tarih sırasına göre
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json"
+            }
+        });
+    });
+
     function confirmDelete(contactId) {
         Swal.fire({
             title: "Emin misiniz?",
@@ -61,7 +79,6 @@
             cancelButtonText: "Hayır, iptal et"
         }).then((result) => {
             if (result.isConfirmed) {
-               
                 fetch(`/Message/Delete/${contactId}`, {
                     method: "POST",
                     headers: {
@@ -70,7 +87,7 @@
                 }).then(response => {
                     if (response.ok) {
                         Swal.fire("Silindi!", "Kayıt başarıyla silindi.", "success").then(() => {
-                            location.reload(); 
+                            location.reload();
                         });
                     } else {
                         Swal.fire("Hata!", "Kayıt silinemedi.", "error");

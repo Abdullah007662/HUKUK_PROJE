@@ -2,7 +2,6 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
 <html lang="tr">
 
@@ -10,6 +9,14 @@
     @await Component.InvokeAsync("_HeadPartials")
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        .slider_bg_1 {
+            background-image: url(~/lawyer-master/img/banner/banner.png);
+        }
+
+        .slider_bg_2 {
+            background-image: url(~/lawyer-master/img/banner/banner2.png);
+        }
+
         .appointment_area {
             padding: 50px 0;
         }
@@ -60,7 +67,7 @@
                                 <input type="text" id="nameSurname" name="NameSurname" asp-for="NameSurname" placeholder="Ad Soyad" required>
                             </div>
                             <div class="col-xl-6 col-md-6">
-                                <input type="email" id="email" name="Email" asp-for="Email" placeholder="E-posta" required>
+                                <input type="email" id="email" name="Email" asp-for="Email" placeholder="Lütfen Geçerli Bir E-posta Giriniz" required>
                             </div>
                             <div class="col-xl-6 col-md-6">
                                 <input type="text" id="phoneNumber" name="PhoneNumber" asp-for="PhoneNumber" placeholder="Telefon Numarası" required>
@@ -74,15 +81,14 @@
                             <div class="col-xl-6 col-md-6">
                                 <select id="lawType" name="LawTypeID" class="form-control" required>
                                     <option value="">Lütfen bir kategori seçin</option>
-                                    @foreach (var item in ViewBag.v1 as List<SelectListItem>)
+                                    @foreach (var item in ViewBag.v1 as List<SelectListItem> ?? new List<SelectListItem>())
                                     {
                                         <option value="@item.Value">@item.Text</option>
                                     }
                                 </select>
                             </div>
-
                             <div class="col-xl-12">
-                                <textarea id="message" name="Message" asp-for="Message" placeholder="Mesajınızı buraya yazınız..." required></textarea>
+                                <textarea id="message" name="Message" asp-for="Message" placeholder="Olayı Kısaca Anlayınız..." required></textarea>
                             </div>
                             <div class="col-xl-12">
                                 <div class="appoinment_button">
@@ -95,9 +101,7 @@
 
                 <!-- Google Maps İframe -->
                 <div class="map_container">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12190.900844752408!2d29.04069721511351!3d40.19292837926967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ca3de2cae40b37%3A0x9bf6a2c5985be498!2sTophane%20Saat%20Kulesi!5e0!3m2!1str!2str!4v1743716831175!5m2!1str!2str"
-                            width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
             </div>
         </div>
@@ -107,11 +111,58 @@
     @await Component.InvokeAsync("_ScriptPartials")
 
     <script>
+        const today = new Date().toISOString().split('T')[0];
+        const appointmentDate = document.getElementById("appointmentDate");
+        const appointmentTime = document.getElementById("appointmentTime");
+
+        appointmentDate.setAttribute("min", today);
+
+        appointmentDate.addEventListener("change", function () {
+            const selectedDate = new Date(this.value);
+            const now = new Date();
+
+            if (selectedDate.toDateString() === now.toDateString()) {
+                const currentHour = now.getHours().toString().padStart(2, '0');
+                const currentMinute = now.getMinutes().toString().padStart(2, '0');
+                let minTime = `${currentHour}:${currentMinute}`;
+
+                if (minTime < "10:00") minTime = "10:00";
+                if (minTime > "18:00") minTime = "18:00";
+                appointmentTime.setAttribute("min", minTime);
+            } else {
+                appointmentTime.setAttribute("min", "10:00");
+            }
+        });
+
         document.getElementById("appointmentForm").addEventListener("submit", function (event) {
             event.preventDefault();
 
-            const formData = new FormData(event.target);
+            const email = document.getElementById("email").value;
+            const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
 
+
+            if (!emailRegex.test(email)) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Geçersiz E-posta',
+                    text: 'Lütfen geçerli bir e-posta adresi giriniz.',
+                    confirmButtonText: 'Tamam'
+                });
+                return;
+            }
+
+            const selectedTime = appointmentTime.value;
+            if (selectedTime < "10:00" || selectedTime > "18:00") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Geçersiz Saat',
+                    text: 'Lütfen 10:00 ile 18:00 saatleri arasında bir saat seçiniz.',
+                    confirmButtonText: 'Tamam'
+                });
+                return;
+            }
+
+            const formData = new FormData(event.target);
             fetch('/Default/Create', {
                 method: 'POST',
                 body: formData
@@ -145,6 +196,5 @@
                 });
         });
     </script>
-
 </body>
 </html>

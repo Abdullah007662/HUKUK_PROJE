@@ -1,10 +1,11 @@
-﻿using HUKUK_PROJE.Entities;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using HUKUK_PROJE.Entities;
 
 namespace HUKUK_PROJE.Context
 {
-    public class HukukContext : DbContext
+    public class HukukContext : IdentityDbContext<AppUser, AppRole, int>
+
     {
         private readonly IConfiguration _configuration;
 
@@ -28,5 +29,6 @@ namespace HUKUK_PROJE.Context
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<LawTypes> LawTypes { get; set; }
+        public DbSet<Admin> Admins { get; set; }
     }
 }

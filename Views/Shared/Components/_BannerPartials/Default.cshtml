@@ -1,17 +1,22 @@
-﻿<div class="slider_area ">
+﻿@model List<Banner>
+<div class="slider_area ">
     <div class="slider_area_inner slider_bg_1 d-flex align-items-center">
         <div class="container">
             <div class="row">
                 <div class="col-xl-7">
                     <div class="single_slider">
-                        <div class="slider_text">
-                            <h3>
-                                High Quality Law <br>
-                                Advice and Support
-                            </h3>
-                            <p>Leading Polish Lawyer in your city</p>
-                            <a href="#" class="boxed-btn4 ">Learn More</a>
-                        </div>
+                        @foreach (var item in Model)
+                        {
+
+
+                            <div class="slider_text">
+                                <h3>
+                                    @item.Title
+                                </h3>
+                                <p>@item.Description</p>
+                                <a href="#" class="boxed-btn4 ">Learn More</a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

@@ -1,0 +1,19 @@
+﻿@model Banner
+@{
+    ViewData["Title"] = "Update";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+<h1>Site Afişi Güncellme Ekranı</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="BannerID" />
+    <label>Başlık</label>
+    <input type="text" asp-for="Title" class="form-control" />
+    <br />
+    <label>Açıklama</label>
+    <input type="text" asp-for="Description" class="form-control" />
+    <br />
+    <button class="btn btn-primary">Güncelle</button>
+</form>
+

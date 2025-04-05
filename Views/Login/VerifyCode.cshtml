@@ -1,0 +1,13 @@
+﻿@model VerifyCodeViewModel
+
+@{
+    Layout = null;
+}
+
+
+<form method="post">
+    <input asp-for="Email" type="hidden" value="@TempData["Mail"]" />
+    <input asp-for="Code" placeholder="Doğrulama Kodunu Girin" />
+    <button type="submit">Doğrula</button>
+</form>
+

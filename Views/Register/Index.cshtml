@@ -1,0 +1,19 @@
+﻿@model HUKUK_PROJE.Models.AppUserRegisterDTO
+@{
+    Layout = null;
+}
+
+<form method="post">
+    <input type="text" asp-for="KullanıcıAdı" placeholder="Kullanıcı Adınız.." required />
+    <input type="password" asp-for="Şifre" placeholder="Şifreniz.." required />
+    <input type="email" asp-for="Email" placeholder="Email Adresiniz.." required />
+    <button class="btn btn-primary">Kayıt Ol</button>
+</form>
+
+<!-- Hataları göstermek için -->
+<div>
+    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+    {
+        <p style="color:red">@error.ErrorMessage</p>
+    }
+</div>

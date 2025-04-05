@@ -1,49 +1,62 @@
-using HUKUK_PROJE.Context;
+Ôªøusing Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using HUKUK_PROJE.Context;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using HUKUK_PROJE.Entities;
+using Microsoft.AspNetCore.Identity;
 
-namespace HUKUK_PROJE
-{
-    public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+
+// DbContext
+builder.Services.AddDbContext<HukukContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// ‚¨áÔ∏è BURASI EKSƒ∞KTƒ∞! Bunu mutlaka ekle!
+builder.Services.AddIdentity<AppUser, AppRole>()
+    .AddEntityFrameworkStores<HukukContext>()
+    .AddDefaultTokenProviders();
+
+// Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.Strict;
+        options.Cookie.Name = "AspNetCore_MVC_Admin";
+        options.ExpireTimeSpan = TimeSpan.FromHours(15); // Oturum s√ºresi 15 saat
+        options.LoginPath = "/Login/Index";
+        options.AccessDeniedPath = "/Login/Index";
+        options.ReturnUrlParameter = "ReturnUrl";
+    });
 
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
+// Authorization policy
+builder.Services.AddMvc(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
 
-            // **DbContext Yap˝land˝rmas˝**
-            builder.Services.AddDbContext<HukukContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+var app = builder.Build();
 
-            var app = builder.Build();
-
-            // **Veritaban˝ Migrations ›˛lemini Otomatik «al˝˛t˝rma**
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var context = services.GetRequiredService<HukukContext>();
-                context.Database.Migrate(); // Eer migration yoksa, olu˛turur
-            }
-
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
-            app.UseRouting();
-            app.UseAuthorization();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Default}/{action=Index}/{id?}");
-
-            app.Run();
-        }
-    }
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
 }
+
+app.UseStaticFiles();
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Default}/{action=Index}/{id?}");
+
+app.Run();
