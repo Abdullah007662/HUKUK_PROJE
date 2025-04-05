@@ -4,10 +4,79 @@
     Layout = null;
 }
 
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Doğrulama Kodu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-<form method="post">
-    <input asp-for="Email" type="hidden" value="@TempData["Mail"]" />
-    <input asp-for="Code" placeholder="Doğrulama Kodunu Girin" />
-    <button type="submit">Doğrula</button>
-</form>
+        .verify-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
 
+        .verify-container h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        input[type="hidden"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            background-color: #2575fc;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1a5ed0;
+        }
+    </style>
+</head>
+<body>
+    <div class="verify-container">
+        <h2>Doğrulama Kodu</h2>
+        <form method="post">
+            <input asp-for="Email" type="hidden" value="@TempData["Mail"]" />
+            <div class="form-group">
+                <input asp-for="Code" type="text" placeholder="Doğrulama Kodunu Girin" />
+            </div>
+            <button type="submit">Doğrula</button>
+        </form>
+    </div>
+</body>
+</html>

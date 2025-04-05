@@ -27,10 +27,10 @@ public class LoginController : Controller
     [HttpPost]
     public async Task<IActionResult> Index(LoginViewModel model)
     {
-        var user = await _userManager.FindByNameAsync(model.Username);
+        var user = await _userManager.FindByNameAsync(model.Username!);
         if (user != null)
         {
-            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password!, false);
             if (result.Succeeded)
             {
                 Random rnd = new Random();
@@ -72,7 +72,7 @@ public class LoginController : Controller
     [HttpPost]
     public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
     {
-        var user = await _userManager.FindByEmailAsync(model.Email);
+        var user = await _userManager.FindByEmailAsync(model.Email!);
         if (user != null && user.ConfirmCode == model.Code)
         {
             // Gerçek giriş işlemi burada yapılabilir.
