@@ -1,0 +1,50 @@
+﻿@model Contact
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+}
+
+<div class="container-fluid pt-4 px-4" style="background-color: #1e2124; min-height: 100vh;">
+    <div class="row g-4">
+        <div class="col-12">
+            <!-- Gri renk tonu kullanıldı, kutu içeriği beyaz ve yazılar beyaz kaldı -->
+            <div class="rounded h-100 p-4" style="background-color: #6c757d; color: #f8f9fa; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
+                <h6 class="mb-4">Randevu Detay Sayfası</h6>
+                <form>
+                    <input type="hidden" asp-for="ContactID" />
+
+                    <label>Ad Soyad</label>
+                    <input type="text" asp-for="NameSurname" class="form-control bg-dark text-white border-0" readonly />
+                    <br />
+
+                    <label>Telefon Numarası</label>
+                    <input type="text" asp-for="PhoneNumber" class="form-control bg-dark text-white border-0" readonly />
+                    <br />
+
+                    <label>Email</label>
+                    <input type="text" asp-for="Email" class="form-control bg-dark text-white border-0" readonly />
+                    <br />
+
+                    <label>Tarih</label>
+                    <input type="text" class="form-control bg-dark text-white border-0" value="@Model.AppointmentDate.ToString("dd - MMMM - yyyy")" readonly />
+                    <br />
+
+                    <label>Saat</label>
+                    <input type="text" class="form-control bg-dark text-white border-0" value="@Model.AppointmentTime.ToString(@"hh\:mm")" readonly />
+                    <br />
+
+                    <label>Türü</label>
+                    <input type="text" class="form-control bg-dark text-white border-0" value="@Model.LawTypes?.Type" readonly />
+                    <br />
+
+                    <label>Mesaj</label>
+                    <textarea asp-for="Message" class="form-control bg-dark text-white border-0" rows="8" readonly style="resize: none;"></textarea>
+                    <br />
+                </form>
+
+                <a href="/Message/Index/" class="btn btn-primary">Mesajlar Sayfasına Dön</a>
+            </div>
+        </div>
+    </div>
+</div>

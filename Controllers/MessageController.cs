@@ -28,5 +28,11 @@ namespace HUKUK_PROJE.Controllers
             _hukukContext.SaveChanges();
             return Ok();
         }
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var values = _hukukContext.Contacts.Include(x => x.LawTypes).FirstOrDefault();
+            return View(values);
+        }
     }
 }

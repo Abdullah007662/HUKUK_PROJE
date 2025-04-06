@@ -1,41 +1,14 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore;
-using HUKUK_PROJE.Context;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using HUKUK_PROJE.Context;
 using HUKUK_PROJE.Entities;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-
-// DbContext
-builder.Services.AddDbContext<HukukContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// ⬇️ BURASI EKSİKTİ! Bunu mutlaka ekle!
-builder.Services.AddIdentity<AppUser, AppRole>()
-    .AddEntityFrameworkStores<HukukContext>()
-    .AddDefaultTokenProviders();
-
-// Authentication
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.Cookie.SameSite = SameSiteMode.Strict;
-        options.Cookie.Name = "AspNetCore_MVC_Admin";
-        options.ExpireTimeSpan = TimeSpan.FromHours(15); // Oturum süresi 15 saat
-        options.LoginPath = "/Login/Index";
-        options.AccessDeniedPath = "/Login/Index";
-        options.ReturnUrlParameter = "ReturnUrl";
-    });
-
-// Authorization policy
-builder.Services.AddMvc(options =>
+// MVC + Authorization filter
+builder.Services.AddControllersWithViews(options =>
 {
     var policy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
@@ -43,18 +16,53 @@ builder.Services.AddMvc(options =>
     options.Filters.Add(new AuthorizeFilter(policy));
 });
 
+// DbContext ayarı
+builder.Services.AddDbContext<HukukContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+// Identity ayarı
+builder.Services.AddIdentity<AppUser, AppRole>(options =>
+{
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 6;
+})
+.AddEntityFrameworkStores<HukukContext>()
+.AddDefaultTokenProviders();
+
+// Cookie ayarı (Login yönlendirmesi burada)
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Login/Index"; // Doğru login path burası!
+    options.AccessDeniedPath = "/Login/Index";
+    options.ReturnUrlParameter = "ReturnUrl";
+    options.Cookie.Name = "AspNetCore_MVC_Admin";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.ExpireTimeSpan = TimeSpan.FromHours(15); // Oturum süresi
+});
+
 var app = builder.Build();
 
+// Hata sayfası
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
 
+// Static dosyalar ve middleware
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
 
+app.UseAuthentication(); // Giriş kontrolü
+app.UseAuthorization();  // Yetki kontrolü
+
+// Default route
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Default}/{action=Index}/{id?}");

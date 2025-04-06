@@ -10,6 +10,7 @@
     <meta charset="UTF-8">
     <title>Doğrulama Kodu</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -30,11 +31,11 @@
             max-width: 400px;
         }
 
-        .verify-container h2 {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #333;
-        }
+            .verify-container h2 {
+                text-align: center;
+                margin-bottom: 25px;
+                color: #333;
+            }
 
         .form-group {
             margin-bottom: 20px;
@@ -62,15 +63,15 @@
             transition: background-color 0.3s ease;
         }
 
-        button:hover {
-            background-color: #1a5ed0;
-        }
+            button:hover {
+                background-color: #1a5ed0;
+            }
     </style>
 </head>
 <body>
     <div class="verify-container">
         <h2>Doğrulama Kodu</h2>
-        <form method="post">
+        <form id="verifyForm" method="post">
             <input asp-for="Email" type="hidden" value="@TempData["Mail"]" />
             <div class="form-group">
                 <input asp-for="Code" type="text" placeholder="Doğrulama Kodunu Girin" />
@@ -78,5 +79,23 @@
             <button type="submit">Doğrula</button>
         </form>
     </div>
+
+    @* <script>
+        document.getElementById("verifyForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // Doğrulama kodu başarıyla girildiğinde SweetAlert göster
+            Swal.fire({
+                title: 'Hoşgeldiniz!',
+                text: 'Doğrulama başarılı, yönlendiriliyorsunuz...',
+                icon: 'success',
+                timer: 2000,  // 2 saniye sonra yönlendirilecek
+                showConfirmButton: false
+            }).then(function () {
+                // Yönlendirme işlemi
+                window.location.href = '@Url.Action("Result", "Home")';  // Yönlendirilecek sayfa
+            });
+        });
+    </script> *@
 </body>
 </html>

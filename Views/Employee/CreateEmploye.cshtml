@@ -1,0 +1,41 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "CreateEmploye";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+<<div class="container-fluid pt-4 px-4" style="background-color: #1e2124; min-height: 100vh;">
+    <div class="row g-4">
+        <div class="col-12">
+            <!-- Gri renk tonu kullanıldı, kutu içeriği beyaz ve yazılar beyaz kaldı -->
+            <div class="rounded h-100 p-4" style="background-color: #6c757d; color: #f8f9fa; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
+                <h6 class="mb-4">Çalışan Ekleme Sayfası</h6>
+                <form method="post">
+
+                    <label>Ad Soyad</label>
+                    <input type="text" asp-for="NameSurname" class="form-control bg-dark text-white border-0"  />
+                    <br />
+
+                    <label>Departman</label>
+                    <input type="text" asp-for="Department" class="form-control bg-dark text-white border-0"  />
+                    <br />
+
+                    <label>İnstagram</label>
+                    <input type="text" asp-for="InstagramUrl" class="form-control bg-dark text-white border-0"  />
+                    <br />
+
+                    <label>Twitter</label>
+                    <input type="text" asp-for="TwitterUrl" class="form-control bg-dark text-white border-0"  />
+                    <br />
+
+                    <label>Facebook</label>
+                    <input type="text" asp-for="FacebookUrl" class="form-control bg-dark text-white border-0"  />
+                    <br />
+                    <button class="btn btn-primary"> Çalışanı Ekle</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+

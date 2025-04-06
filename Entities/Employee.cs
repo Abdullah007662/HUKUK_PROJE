@@ -9,8 +9,8 @@ namespace HUKUK_PROJE.Entities
         public int EmployeeID { get; set; }
 
         [Column(TypeName = "VarChar")]
-        [StringLength(150)]
-        public string? Title { get; set; }
+        [StringLength(25)]
+        public string? NameSurname { get; set; }
 
         [Column(TypeName = "VarChar")]
         [StringLength(30)]
