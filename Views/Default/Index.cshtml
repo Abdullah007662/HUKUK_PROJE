@@ -82,7 +82,7 @@
                                 </select>
                             </div>
                             <div class="col-xl-6 col-md-6 mb-3">
-                                <select id="lawType" name="LawTypeID" class="form-control" required>
+                                <select id="lawType" asp-for="LawTypes!.LawTypesID" class="form-control" required>
                                     <option value="">Lütfen bir kategori seçin</option>
                                     @foreach (var item in (List<SelectListItem>)ViewBag.v1)
                                     {

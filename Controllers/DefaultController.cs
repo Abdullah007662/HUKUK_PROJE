@@ -55,7 +55,7 @@ namespace HUKUK_PROJE.Controllers
                 AppointmentDate = model.AppointmentDate,
                 AppointmentTime = model.AppointmentTime,
                 Message = model.Message,
-                LawTypeID = model.LawTypeID
+                LawTypes = _hukukContext.LawTypes.FirstOrDefault(x => x.LawTypesID == model.LawTypes!.LawTypesID)
             };
 
             _hukukContext.Contacts.Add(newAppointment);
@@ -69,7 +69,7 @@ namespace HUKUK_PROJE.Controllers
                 mimeMessage.Subject = "Randevu Onayı";
 
                 var selectedCategory = _hukukContext.LawTypes
-                    .FirstOrDefault(x => x.LawTypesID == model.LawTypeID)?.Type;
+                    .FirstOrDefault(x => x.LawTypesID == model.LawTypes!.LawTypesID)?.Type;
 
                 var bodyBuilder = new BodyBuilder
                 {

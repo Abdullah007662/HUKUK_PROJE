@@ -4,6 +4,7 @@ using HUKUK_PROJE.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HUKUKPROJE.Migrations
 {
     [DbContext(typeof(HukukContext))]
-    partial class HukukContextModelSnapshot : ModelSnapshot
+    [Migration("20250406220202_Deneme")]
+    partial class Deneme
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -214,6 +217,9 @@ namespace HUKUKPROJE.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LawTypeID")
+                        .HasColumnType("int");
 
                     b.Property<int?>("LawTypesID")
                         .HasColumnType("int");
@@ -446,7 +452,7 @@ namespace HUKUKPROJE.Migrations
             modelBuilder.Entity("HUKUK_PROJE.Entities.Contact", b =>
                 {
                     b.HasOne("HUKUK_PROJE.Entities.LawTypes", "LawTypes")
-                        .WithMany()
+                        .WithMany("Contacts")
                         .HasForeignKey("LawTypesID");
 
                     b.Navigation("LawTypes");
@@ -501,6 +507,11 @@ namespace HUKUKPROJE.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HUKUK_PROJE.Entities.LawTypes", b =>
+                {
+                    b.Navigation("Contacts");
                 });
 #pragma warning restore 612, 618
         }

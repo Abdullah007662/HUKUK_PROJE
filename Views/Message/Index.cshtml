@@ -27,7 +27,6 @@
                             <th>Saat</th>
                             <th>Türü</th>
                             <th>Detaylar</th>
-                            <th>Güncelle</th>
                             <th>Sil</th>
                         </tr>
                     </thead>
@@ -43,7 +42,6 @@
                                     <td>@item.AppointmentTime.ToString(@"hh\:mm")</td>
                                     <td>@(item.LawTypes != null ? item.LawTypes.Type : "Bilinmiyor")</td>
                                     <td><a href="/Message/Details/@item.ContactID" class="btn btn-primary">Detaylar</a></td>
-                                    <td><a href="#" class="btn btn-success">Güncelle</a></td>
                                     <td>
                                         <button class="btn btn-danger" onclick="confirmDelete(@item.ContactID)">Sil</button>
                                     </td>

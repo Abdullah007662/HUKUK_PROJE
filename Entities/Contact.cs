@@ -29,7 +29,6 @@ namespace HUKUK_PROJE.Entities
         [Required(ErrorMessage = "Kısaca Olayı Anlatınız.!")]
         [StringLength(500)]
         public string? Message { get; set; }
-        public int LawTypeID { get; set; }
         public LawTypes? LawTypes { get; set; }
 
 
