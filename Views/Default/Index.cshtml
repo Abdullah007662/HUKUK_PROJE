@@ -10,11 +10,11 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .slider_bg_1 {
-            background-image: url(~/lawyer-master/img/banner/banner.png);
+            background-image: url('@Url.Content("~/lawyer-master/img/banner/banner.png")');
         }
 
         .slider_bg_2 {
-            background-image: url(~/lawyer-master/img/banner/banner2.png);
+            background-image: url('@Url.Content("~/lawyer-master/img/banner/banner2.png")');
         }
 
         .appointment_area {
@@ -23,19 +23,21 @@
 
         .appointment_container {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
-            align-items: start;
+            gap: 30px;
         }
 
         .appointment_form {
             flex: 1;
             padding: 20px;
-            max-width: 50%;
+            min-width: 300px;
         }
 
         .map_container {
             flex: 1;
             padding: 20px;
+            min-width: 300px;
         }
 
         textarea {
@@ -57,49 +59,47 @@
     <div class="appointment_area">
         <div class="container">
             <div class="appointment_container">
-                <!-- Randevu Formu -->
                 <div class="appointment_form">
                     <h3><strong>Randevu Al</strong></h3>
                     <br />
-                    <form id="appointmentForm" method="post" asp-action="Create">
+                    <form id="appointmentForm" method="post" asp-controller="Default" asp-action="Create">
                         <div class="row">
-                            <div class="col-xl-6 col-md-6">
-                                <input type="text" id="nameSurname" name="NameSurname" asp-for="NameSurname" placeholder="Ad Soyad" required>
+                            <div class="col-xl-6 col-md-6 mb-3">
+                                <input type="text" id="nameSurname" name="NameSurname" asp-for="NameSurname" placeholder="Ad Soyad" required class="form-control" />
                             </div>
-                            <div class="col-xl-6 col-md-6">
-                                <input type="email" id="email" name="Email" asp-for="Email" placeholder="Lütfen Geçerli Bir E-posta Giriniz" required>
+                            <div class="col-xl-6 col-md-6 mb-3">
+                                <input type="email" id="email" name="Email" asp-for="Email" placeholder="Lütfen geçerli bir e-posta giriniz" required class="form-control" />
                             </div>
-                            <div class="col-xl-6 col-md-6">
-                                <input type="text" id="phoneNumber" name="PhoneNumber" asp-for="PhoneNumber" placeholder="Telefon Numarası" required>
+                            <div class="col-xl-6 col-md-6 mb-3">
+                                <input type="text" id="phoneNumber" name="PhoneNumber" asp-for="PhoneNumber" placeholder="Telefon Numarası" required class="form-control" />
                             </div>
-                            <div class="col-xl-6 col-md-6">
-                                <input type="date" id="appointmentDate" name="AppointmentDate" asp-for="AppointmentDate" required>
+                            <div class="col-xl-6 col-md-6 mb-3">
+                                <input type="date" id="appointmentDate" name="AppointmentDate" asp-for="AppointmentDate" required class="form-control" />
                             </div>
-                            <div class="col-xl-6 col-md-6">
-                                <input type="time" id="appointmentTime" name="AppointmentTime" asp-for="AppointmentTime" min="10:00" max="18:00" required>
+                            <div class="col-xl-6 col-md-6 mb-3">
+                                <select id="appointmentTime" name="AppointmentTime" class="form-control" required>
+                                    <option value="">Saat seçiniz</option>
+                                </select>
                             </div>
-                            <div class="col-xl-6 col-md-6">
+                            <div class="col-xl-6 col-md-6 mb-3">
                                 <select id="lawType" name="LawTypeID" class="form-control" required>
                                     <option value="">Lütfen bir kategori seçin</option>
-                                    @foreach (var item in ViewBag.v1 as List<SelectListItem> ?? new List<SelectListItem>())
+                                    @foreach (var item in (List<SelectListItem>)ViewBag.v1)
                                     {
                                         <option value="@item.Value">@item.Text</option>
                                     }
                                 </select>
                             </div>
-                            <div class="col-xl-12">
-                                <textarea id="message" name="Message" asp-for="Message" placeholder="Olayı Kısaca Anlayınız..." required></textarea>
+                            <div class="col-xl-12 mb-3">
+                                <textarea id="message" name="Message" asp-for="Message" placeholder="Olayı kısaca anlatınız..." required class="form-control"></textarea>
                             </div>
-                            <div class="col-xl-12">
-                                <div class="appoinment_button">
-                                    <button type="submit" style="cursor:pointer" class="boxed-btn5">Randevu Al</button>
-                                </div>
+                            <div class="col-xl-12 text-center">
+                                <button type="submit" class="boxed-btn5" style="cursor:pointer">Randevu Al</button>
                             </div>
                         </div>
                     </form>
                 </div>
 
-                <!-- Google Maps İframe -->
                 <div class="map_container">
                     <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
@@ -118,20 +118,32 @@
         appointmentDate.setAttribute("min", today);
 
         appointmentDate.addEventListener("change", function () {
-            const selectedDate = new Date(this.value);
-            const now = new Date();
+            const selectedDate = this.value;
 
-            if (selectedDate.toDateString() === now.toDateString()) {
-                const currentHour = now.getHours().toString().padStart(2, '0');
-                const currentMinute = now.getMinutes().toString().padStart(2, '0');
-                let minTime = `${currentHour}:${currentMinute}`;
+            fetch(`/Default/GetUnavailableTimes?date=${selectedDate}`)
+                .then(response => response.json())
+                .then(unavailableTimes => {
+                    appointmentTime.innerHTML = '<option value="">Saat seçiniz</option>';
 
-                if (minTime < "10:00") minTime = "10:00";
-                if (minTime > "18:00") minTime = "18:00";
-                appointmentTime.setAttribute("min", minTime);
-            } else {
-                appointmentTime.setAttribute("min", "10:00");
-            }
+                    for (let hour = 10; hour <= 18; hour++) {
+                        for (let min = 0; min < 60; min += 10) {
+                            const h = hour.toString().padStart(2, '0');
+                            const m = min.toString().padStart(2, '0');
+                            const timeStr = `${h}:${m}`;
+
+                            const option = document.createElement("option");
+                            option.value = timeStr;
+                            option.textContent = timeStr;
+
+                            if (unavailableTimes.includes(timeStr)) {
+                                option.disabled = true;
+                                option.textContent += " (Dolu)";
+                            }
+
+                            appointmentTime.appendChild(option);
+                        }
+                    }
+                });
         });
 
         document.getElementById("appointmentForm").addEventListener("submit", function (event) {
@@ -139,7 +151,6 @@
 
             const email = document.getElementById("email").value;
             const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
-
 
             if (!emailRegex.test(email)) {
                 Swal.fire({
@@ -152,7 +163,7 @@
             }
 
             const selectedTime = appointmentTime.value;
-            if (selectedTime < "10:00" || selectedTime > "18:00") {
+            if (!selectedTime || selectedTime < "10:00" || selectedTime > "18:00") {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Geçersiz Saat',
@@ -163,19 +174,31 @@
             }
 
             const formData = new FormData(event.target);
+
             fetch('/Default/Create', {
                 method: 'POST',
                 body: formData
             })
                 .then(response => {
+                    if (response.status === 409) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Zaman Dilimi Dolu!',
+                            text: 'Bu tarih ve saat için zaten bir randevu alınmış. Lütfen başka bir zaman seçiniz.',
+                            confirmButtonText: 'Tamam'
+                        });
+                        return;
+                    }
+
                     if (response.ok) {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Randevunuz oluşturulmuştur!',
-                            text: 'Randevunuz başarıyla kaydedildi ve mail olarak gönderildi.',
+                            title: 'Randevunuz oluşturuldu!',
+                            text: 'Randevunuz başarıyla kaydedildi ve e-posta gönderildi.',
                             confirmButtonText: 'Tamam'
                         }).then(() => {
                             event.target.reset();
+                            appointmentTime.innerHTML = '<option value="">Saat seçiniz</option>';
                         });
                     } else {
                         Swal.fire({
@@ -196,5 +219,6 @@
                 });
         });
     </script>
+
 </body>
 </html>

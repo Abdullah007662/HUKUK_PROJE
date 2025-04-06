@@ -23,7 +23,6 @@ namespace HUKUK_PROJE.Controllers
         [HttpPost]
         public IActionResult Create([FromForm] Contact model)
         {
-
             List<SelectListItem> Type = _hukukContext.LawTypes
                 .Select(x => new SelectListItem
                 {
@@ -32,13 +31,22 @@ namespace HUKUK_PROJE.Controllers
                 }).ToList();
             ViewBag.v1 = Type;
 
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(new { message = "Lütfen tüm alanları doldurunuz!" });
             }
 
-            // Veritabanına Kaydetme
+            // Aynı gün ve saat için başka randevu var mı kontrolü
+            bool isSlotTaken = _hukukContext.Contacts.Any(x =>
+                x.AppointmentDate == model.AppointmentDate &&
+                x.AppointmentTime == model.AppointmentTime
+            );
+
+            if (isSlotTaken)
+            {
+                return Conflict(new { message = "Bu tarih ve saat için zaten bir randevu alınmış. Lütfen başka bir zaman seçiniz." });
+            }
+
             Contact newAppointment = new Contact
             {
                 NameSurname = model.NameSurname,
@@ -53,15 +61,12 @@ namespace HUKUK_PROJE.Controllers
             _hukukContext.Contacts.Add(newAppointment);
             _hukukContext.SaveChanges();
 
-
             try
             {
                 var mimeMessage = new MimeMessage();
                 mimeMessage.From.Add(new MailboxAddress("Hukuk Randevu Sistemi", "kcdmirapo96@gmail.com"));
                 mimeMessage.To.Add(new MailboxAddress(model.NameSurname, model.Email));
-
                 mimeMessage.Subject = "Randevu Onayı";
-
 
                 var selectedCategory = _hukukContext.LawTypes
                     .FirstOrDefault(x => x.LawTypesID == model.LawTypeID)?.Type;
@@ -81,7 +86,7 @@ namespace HUKUK_PROJE.Controllers
                 using (var client = new SmtpClient())
                 {
                     client.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-                    client.Authenticate("kcdmirapo96@gmail.com", "oauifwpqhjjgrzgn"); // Şifreyi .env veya appsettings.json'dan al
+                    client.Authenticate("kcdmirapo96@gmail.com", "oauifwpqhjjgrzgn");
                     client.Send(mimeMessage);
                     client.Disconnect(true);
                 }
@@ -95,6 +100,7 @@ namespace HUKUK_PROJE.Controllers
         }
 
 
+
         public IActionResult Index()
         {
             ViewBag.v1 = _hukukContext.LawTypes
@@ -105,5 +111,16 @@ namespace HUKUK_PROJE.Controllers
                 }).ToList();
             return View();
         }
+        [HttpGet]
+        public IActionResult GetUnavailableTimes(DateTime date)
+        {
+            var unavailableTimes = _hukukContext.Contacts
+                .Where(c => c.AppointmentDate == date)
+                .Select(c => c.AppointmentTime.ToString(@"hh\:mm")) // Saatleri HH:mm formatında al
+                .ToList();
+
+            return Json(unavailableTimes);
+        }
+
     }
 }
