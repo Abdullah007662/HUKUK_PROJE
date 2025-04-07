@@ -126,7 +126,7 @@ namespace HUKUK_PROJE.Controllers
             var values = _context.Services.Find(id);
             _context.Services.Remove(values!);
             _context.SaveChanges();
-            return View();
+            return RedirectToAction("Index");
         }
     }
 }
