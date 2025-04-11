@@ -47,9 +47,8 @@ public class LoginController : Controller
 
                 using (var client = new SmtpClient())
                 {
-                    // Gmail SMTP ayarları
                     client.Connect("smtp.gmail.com", 587, false);
-                    client.Authenticate("kcdmirapo96@gmail.com", "oauifwpqhjjgrzgn"); // Şifreyi .env veya appsettings.json'dan al
+                    client.Authenticate("kcdmirapo96@gmail.com", "oauifwpqhjjgrzgn");
                     await client.SendAsync(mimeMessage);
                     client.Disconnect(true);
                 }
@@ -66,21 +65,35 @@ public class LoginController : Controller
     [HttpGet]
     public IActionResult VerifyCode()
     {
+        if (TempData["Mail"] == null)
+        {
+            return RedirectToAction("Index");
+        }
+
+        ViewBag.Mail = TempData["Mail"];
+        TempData.Keep("Mail");
         return View();
     }
 
     [HttpPost]
     public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
     {
+        if (string.IsNullOrEmpty(model.Email))
+        {
+            TempData["Error"] = "E-posta adresi alınamadı, lütfen yeniden giriş yapın.";
+            return RedirectToAction("Index");
+        }
+
         var user = await _userManager.FindByEmailAsync(model.Email!);
         if (user != null && user.ConfirmCode == model.Code)
         {
-            // Gerçek giriş işlemi burada yapılabilir.
             await _signInManager.SignInAsync(user, true);
-            return RedirectToAction("Result", "Home"); // Admin panelin controller'ı ve action'ı
+            return RedirectToAction("Message", "Home");
         }
 
-        ModelState.AddModelError("", "Kod hatalı.");
+        TempData["Error"] = "Girmiş olduğunuz kod yanlış.";
+        ViewBag.Mail = model.Email;
+        TempData.Keep("Mail");
         return View();
     }
 
@@ -88,6 +101,6 @@ public class LoginController : Controller
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
-        return RedirectToAction("Index", "Login"); // Giriş sayfasına yönlendirme
+        return RedirectToAction("Index", "Login");
     }
 }

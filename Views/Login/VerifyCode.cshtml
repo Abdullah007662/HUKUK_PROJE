@@ -72,7 +72,7 @@
     <div class="verify-container">
         <h2>Doğrulama Kodu</h2>
         <form id="verifyForm" method="post">
-            <input asp-for="Email" type="hidden" value="@TempData["Mail"]" />
+            <input asp-for="Email" type="hidden" value="@ViewBag.Mail" />
             <div class="form-group">
                 <input asp-for="Code" type="text" placeholder="Doğrulama Kodunu Girin" />
             </div>
@@ -80,22 +80,16 @@
         </form>
     </div>
 
-    @* <script>
-        document.getElementById("verifyForm").addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            // Doğrulama kodu başarıyla girildiğinde SweetAlert göster
+    @if (TempData["Error"] != null)
+    {
+        <script>
             Swal.fire({
-                title: 'Hoşgeldiniz!',
-                text: 'Doğrulama başarılı, yönlendiriliyorsunuz...',
-                icon: 'success',
-                timer: 2000,  // 2 saniye sonra yönlendirilecek
-                showConfirmButton: false
-            }).then(function () {
-                // Yönlendirme işlemi
-                window.location.href = '@Url.Action("Result", "Home")';  // Yönlendirilecek sayfa
+                icon: 'error',
+                title: 'Hata!',
+                text: @Html.Raw(Json.Serialize(TempData["Error"])),
+                confirmButtonColor: '#2575fc'
             });
-        });
-    </script> *@
+        </script>
+    }
 </body>
 </html>
