@@ -4,6 +4,7 @@ using HUKUK_PROJE.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HUKUKPROJE.Migrations
 {
     [DbContext(typeof(HukukContext))]
-    partial class HukukContextModelSnapshot : ModelSnapshot
+    [Migration("20250413043514_Mig_pratica_areass")]
+    partial class Migpraticaareass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -336,10 +339,6 @@ namespace HUKUKPROJE.Migrations
 
                     b.Property<string>("Icon")
                         .HasMaxLength(50)
-                        .HasColumnType("VarChar");
-
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(300)
                         .HasColumnType("VarChar");
 
                     b.Property<string>("Title")

@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HUKUK_PROJE.Entities
 {
-    public class About
+    public class Blog
     {
-        public int AboutID { get; set; }
+        public int BlogID { get; set; }
 
         [Column(TypeName = "VarChar")]
         [StringLength(150)]
@@ -13,15 +13,13 @@ namespace HUKUK_PROJE.Entities
 
         [Column(TypeName = "VarChar")]
         [StringLength(150)]
-        public string? Title2 { get; set; }
+        public string? SmallTitle { get; set; }
 
         [Column(TypeName = "VarChar")]
-        [StringLength(500)]
         public string? Description { get; set; }
 
         [Column(TypeName = "VarChar")]
-        [StringLength(500)]
+        [StringLength(300)]
         public string? ImageUrl { get; set; }
-
     }
 }

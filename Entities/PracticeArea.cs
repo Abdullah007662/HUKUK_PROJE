@@ -3,9 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HUKUK_PROJE.Entities
 {
-    public class About
+    public class PracticeArea
     {
-        public int AboutID { get; set; }
+        public int PracticeAreaID { get; set; }
+
+        [Column(TypeName = "VarChar")]
+        [StringLength(50)]
+        public string? Icon { get; set; }
 
         [Column(TypeName = "VarChar")]
         [StringLength(150)]
@@ -13,15 +17,10 @@ namespace HUKUK_PROJE.Entities
 
         [Column(TypeName = "VarChar")]
         [StringLength(150)]
-        public string? Title2 { get; set; }
-
-        [Column(TypeName = "VarChar")]
-        [StringLength(500)]
         public string? Description { get; set; }
 
         [Column(TypeName = "VarChar")]
-        [StringLength(500)]
+        [StringLength(300)]
         public string? ImageUrl { get; set; }
-
     }
 }

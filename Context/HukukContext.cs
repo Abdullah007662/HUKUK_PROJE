@@ -30,5 +30,7 @@ namespace HUKUK_PROJE.Context
         public DbSet<Service> Services { get; set; }
         public DbSet<LawTypes> LawTypes { get; set; }
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<PracticeArea> PracticeAreas { get; set; }
     }
 }

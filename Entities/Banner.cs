@@ -14,5 +14,9 @@ namespace HUKUK_PROJE.Entities
         [Column(TypeName = "VarChar")]
         [StringLength(500)]
         public string? Description { get; set; }
+
+        [Column(TypeName = "VarChar")]
+        [StringLength(500)]
+        public string? ImageUrl { get; set; }
     }
 }

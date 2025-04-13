@@ -1,4 +1,4 @@
-﻿@model Banner
+﻿@model PracticeArea
 @{
     ViewData["Title"] = "Update";
     Layout = "~/Views/Admin/Index.cshtml";
@@ -8,9 +8,9 @@
     <div class="row g-4">
         <div class="col-12">
             <div class="rounded h-100 p-4" style="background-color: #6c757d; color: #f8f9fa; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
-                <h6 class="mb-4">Afiş Güncelleme Sayfası</h6>
+                <h6 class="mb-4">Hizmet Güncelleme Sayfası</h6>
                 <form method="post" enctype="multipart/form-data">
-                    <input type="hidden" asp-for="BannerID" />
+                    <input type="hidden" asp-for="PracticeAreaID" />
 
                     <label>Başlık</label>
                     <input type="text" asp-for="Title" class="form-control bg-dark text-white border-0" />
@@ -20,10 +20,14 @@
                     <input type="text" asp-for="Description" class="form-control bg-dark text-white border-0" />
                     <br />
 
+                    <label>İkon</label>
+                    <input type="text" asp-for="Icon" class="form-control bg-dark text-white border-0" />
+                    <br />
+
                     <label>Mevcut Görsel</label><br />
                     @if (!string.IsNullOrEmpty(Model.ImageUrl))
                     {
-                        <img src="@Model.ImageUrl" alt="Hizmet Görseli" width="150" class="mb-2" />
+                        <img src="@Model.ImageUrl" alt="Hizmet Görseli" width="150" class="mb-2"  />
                     }
                     else
                     {
@@ -32,12 +36,13 @@
                     <br />
 
                     <label>Yeni Görsel Yükle (İsteğe Bağlı)</label>
-                    <input type="file" name="ImageFile" class="form-control bg-dark text-white border-0" accept="image/*" />
+                    <input type="file" name="ImageFile" class="form-control bg-dark text-white border-0" accept="image/*" readonly/>
                     <br />
 
-                    <button class="btn btn-success">Afiş Güncelle</button>
+                    <button class="btn btn-success">Hizmeti Güncelle</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+

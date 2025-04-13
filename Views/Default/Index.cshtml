@@ -10,11 +10,11 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .slider_bg_1 {
-            background-image: url('@Url.Content("~/lawyer-master/img/banner/banner.png")');
+            background-image: url('@Url.Content(ViewBag.Banner1Image)');
         }
 
         .slider_bg_2 {
-            background-image: url('@Url.Content("~/lawyer-master/img/banner/banner2.png")');
+            background-image: url('@Url.Content(ViewBag.Banner2Image)');
         }
 
         .appointment_area {
@@ -45,12 +45,14 @@
             height: 300px;
             resize: vertical;
         }
+
     </style>
 </head>
 
 <body>
     @await Component.InvokeAsync("_HeaderPartials")
     @await Component.InvokeAsync("_BannerPartials")
+    <br />
     @await Component.InvokeAsync("_AboutPartials")
     @await Component.InvokeAsync("_ServicePartials")
     @await Component.InvokeAsync("_EmployeeParials")

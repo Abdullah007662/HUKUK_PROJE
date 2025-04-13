@@ -1,4 +1,4 @@
-﻿@model Banner
+﻿@model About
 @{
     ViewData["Title"] = "Update";
     Layout = "~/Views/Admin/Index.cshtml";
@@ -8,12 +8,16 @@
     <div class="row g-4">
         <div class="col-12">
             <div class="rounded h-100 p-4" style="background-color: #6c757d; color: #f8f9fa; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
-                <h6 class="mb-4">Afiş Güncelleme Sayfası</h6>
+                <h6 class="mb-4">Hakkımızda Güncelleme Sayfası</h6>
                 <form method="post" enctype="multipart/form-data">
-                    <input type="hidden" asp-for="BannerID" />
+                    <input type="hidden" asp-for="AboutID" />
 
-                    <label>Başlık</label>
+                    <label>Başlık 1</label>
                     <input type="text" asp-for="Title" class="form-control bg-dark text-white border-0" />
+                    <br />
+
+                    <label>Başlık 2</label>
+                    <input type="text" asp-for="Title2" class="form-control bg-dark text-white border-0" />
                     <br />
 
                     <label>Açıklama</label>
@@ -35,9 +39,10 @@
                     <input type="file" name="ImageFile" class="form-control bg-dark text-white border-0" accept="image/*" />
                     <br />
 
-                    <button class="btn btn-success">Afiş Güncelle</button>
+                    <button class="btn btn-success">Güncelle</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+

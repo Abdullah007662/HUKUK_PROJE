@@ -1,56 +1,82 @@
-﻿<div class="about_area">
+﻿@model List<About>
+<div class="about_area">
     <div class="opacity_icon d-none d-lg-block">
         <i class="flaticon-balance"></i>
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-xl-6 col-md-6">
-                <div class="single_about_info text-center">
-                    <div class="about_thumb">
-                        <img src="~/lawyer-master/img/about/1.png" alt="">
-                    </div>
-                    <h3>
-                        Finest And Strongest Law <br>
-                        Firm Win The World
-                    </h3>
-                    <p>
-                        There are many variations of passages of Lorem Ipsum <br> available, but the majority have
-                        suffered alteration in <br> some form, by injected humour, or randomised words <br> which
-                        don't look even slightly believable.
-                    </p>
-                    <div class="signature">
-                        <img src="~/lawyer-master/img/about/signature.png" alt="">
+            @foreach (var item in Model)
+            {
+                <div class="col-xl-6 col-md-6">
+                    <div class="single_about_info text-center">
+                        <div class="about_thumb">
+                            <img src="/aboutimages/1.png" alt="">
+                        </div>
+                        <h3>
+                            @item.Title<br>
+                            @item.Title2
+                        </h3>
+                        <p>
+                            @item.Description
+                        </p>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-6 col-md-6">
-                <div class="single_about_info text-center">
-                    <div class="about_thumb">
-                        <div class="image_hover">
-                            <div class="hover_inner">
-                                <h2>93%</h2>
-                                <span>Success Case</span>
-                            </div>
-                        </div>
-                    </div>
-                    <h3>About Lawyer Justice</h3>
-                    <p>
-                        There are many variations of passages of Lorem Ipsum <br> available, but the majority have
-                        suffered alteration in <br> some form, by injected humour, or randomised words <br> which
-                        don't look even slightly believable.
-                    </p>
-                    <div class="total_cases">
-                        <div class="single_cases">
-                            <h4>879</h4>
-                            <p>Total Cases</p>
-                        </div>
-                        <div class="single_cases">
-                            <h4>787</h4>
-                            <p>Case Won</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </div>
+
+<style>
+    /* Sayfayı ortalamak için düzenleme */
+    .about_area {
+        display: flex;
+        justify-content: center; /* Yatayda ortalama */
+        align-items: center; /* Dikeyde ortalama */
+        height: 100vh; /* Sayfa yüksekliği kadar */
+        padding: 0; /* İç boşluğu kaldır */
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column; /* İçerik sütun olarak düzenlendi */
+        align-items: center; /* Yatayda ortalama */
+        padding: 0 15px; /* Sağ ve sol kenarlardan biraz boşluk */
+    }
+
+    .row {
+        display: flex;
+        justify-content: center; /* Yatayda öğeleri ortalamak */
+        flex-wrap: wrap; /* Öğeleri alt satıra kaydırmak */
+        width: 100%;
+    }
+
+    .col-xl-6, .col-md-6 {
+        display: flex;
+        justify-content: center; /* Yatayda ortalama */
+        align-items: center; /* Dikeyde ortalama */
+        text-align: center; /* İçeriklerin ortalanması */
+        padding: 10px; /* Her öğe arasında boşluk bırakmak */
+    }
+
+    .single_about_info {
+        max-width: 500px; /* Öğelerin maksimum genişliği */
+        padding: 20px;
+    }
+
+    .about_thumb img {
+        max-width: 100%; /* Resimlerin kapsayıcıya göre genişliği */
+        height: auto;
+    }
+
+    .single_about_info h3 {
+        margin-top: 15px;
+        font-size: 2rem; /* Başlık boyutunu büyütmek */
+        color: #333;
+    }
+
+    .single_about_info p {
+        font-size: 1.2rem; /* Yazı boyutunu büyütmek */
+        color: #666;
+        margin-top: 10px;
+    }
+</style>

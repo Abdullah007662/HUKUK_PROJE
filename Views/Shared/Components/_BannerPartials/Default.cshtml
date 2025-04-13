@@ -1,4 +1,11 @@
 ﻿@model List<Banner>
+<style>
+    .slider_text {
+        text-align: left; /* Metni sola hizalar */
+        margin-left: -200px; /* Soldan boşluk bırakır (isteğe bağlı artırılabilir) */
+        color: white; /* Yazıları beyaz yapar */
+    }
+</style>
 <div class="slider_area ">
     <div class="slider_area_inner slider_bg_1 d-flex align-items-center">
         <div class="container">
@@ -7,14 +14,11 @@
                     <div class="single_slider">
                         @foreach (var item in Model)
                         {
-
-
-                            <div class="slider_text">
+                            <div class="slider_text" style="">
                                 <h3>
                                     @item.Title
                                 </h3>
                                 <p>@item.Description</p>
-                                <a href="#" class="boxed-btn4 ">Learn More</a>
                             </div>
                         }
                     </div>
