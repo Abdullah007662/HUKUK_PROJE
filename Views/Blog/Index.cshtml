@@ -1,80 +1,150 @@
-﻿@{
+﻿@model List<Blog>
+@{
     Layout = null;
+    int currentPage = ViewBag.CurrentPage;
+    int totalPages = ViewBag.TotalPages;
 }
 
 <!doctype html>
 <html class="no-js" lang="zxx">
-
 <head>
     @await Component.InvokeAsync("_HeadPartials")
 </head>
 
 <body>
     @await Component.InvokeAsync("_HeaderPartials")
+
     <div class="bradcam_area">
         <div class="bradcam_inner bradcam_bg_2 d-flex align-items-center">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="bradcam_text text-center">
-                            <h3>Blog </h3>
+                            <h3>Blog</h3>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <section class="blog_area section-padding">
         <div class="container">
             <div class="row">
+                <!-- SOL TARAF - Bloglar -->
                 <div class="col-lg-8 mb-5 mb-lg-0">
                     <div class="blog_left_sidebar">
-@*                         @foreach (var item in Model)
- *@                        {
-                            <article class="blog_item">
-                                <div class="blog_item_img">
-                                    <img class="card-img rounded-0" src="~/lawyer-master/img/blog/single_blog_1.png" alt="">
-                                </div>
 
-                                <div class="blog_details">
-                                    <a class="d-inline-block" href="single-blog.html">
-                                        <h2>Google inks pact for new 35-storey office</h2>
-                                    </a>
-                                    <p>
-                                        That dominion stars lights dominion divide years for fourth have don't stars is that
-                                        he earth it first without heaven in place seed it second morning saying.
-                                    </p>
-                                </div>
-                            </article>
-                        }
+                        <!-- Arama Kutusu -->
+                        <div class="input-group mb-4">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search Keyword"
+                                   onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Keyword'">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" onclick="searchBlog()">
+                                    <i class="ti-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+
+                        <!-- Blog Listesi -->
+                        <div id="blogList">
+                            @foreach (var item in Model)
+                            {
+                                <article class="blog_item">
+                                    <div class="blog_item_img">
+                                        <img class="card-img rounded-0" src="@item.ImageUrl" alt="">
+                                    </div>
+                                    <div class="blog_details">
+                                        <a class="d-inline-block" href="/Blog/Details/@item.BlogID">
+                                            <h2 class="blog-title">@item.Title</h2>
+                                        </a>
+                                        <p>@item.SmallTitle</p>
+                                    </div>
+                                </article>
+                            }
+                        </div>
+
+                        <!-- Sayfalama -->
                         <nav class="blog-pagination justify-content-center d-flex">
                             <ul class="pagination">
-                                <li class="page-item">
-                                    <a href="#" class="page-link" aria-label="Previous">
-                                        <i class="ti-angle-left"></i>
-                                    </a>
-                                </li>
-                                <li class="page-item">
-                                    <a href="#" class="page-link">1</a>
-                                </li>
-                                <li class="page-item active">
-                                    <a href="#" class="page-link">2</a>
-                                </li>
-                                <li class="page-item">
-                                    <a href="#" class="page-link" aria-label="Next">
-                                        <i class="ti-angle-right"></i>
-                                    </a>
-                                </li>
+                                @if (currentPage > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=@(currentPage - 1)" aria-label="Previous">
+                                            <i class="ti-angle-left"></i>
+                                        </a>
+                                    </li>
+                                }
+
+                                @for (int i = 1; i <= totalPages; i++)
+                                {
+                                    <li class="page-item @(i == currentPage ? "active" : "")">
+                                        <a class="page-link" href="?page=@i">@i</a>
+                                    </li>
+                                }
+
+                                @if (currentPage < totalPages)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=@(currentPage + 1)" aria-label="Next">
+                                            <i class="ti-angle-right"></i>
+                                        </a>
+                                    </li>
+                                }
                             </ul>
                         </nav>
                     </div>
                 </div>
+
+                <!-- SAĞ TARAF BOŞ -->
             </div>
         </div>
     </section>
+
     @await Component.InvokeAsync("_FooterPartials")
     @await Component.InvokeAsync("_ScriptPartials")
 
+    <!-- Arama JS Kodu -->
+    <script>
+        document.getElementById("searchInput").addEventListener("keyup", function (e) {
+            if (e.key === "Enter") {
+                searchBlog();
+            } else {
+                liveSearch();
+            }
+        });
 
+        function liveSearch() {
+            var searchValue = document.getElementById("searchInput").value.toLowerCase();
+            var blogItems = document.querySelectorAll("#blogList .blog_item");
+
+            blogItems.forEach(function (item) {
+                var title = item.querySelector(".blog-title").textContent.toLowerCase();
+                if (title.includes(searchValue)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
+
+        function searchBlog() {
+            var searchValue = document.getElementById("searchInput").value.toLowerCase().trim();
+            var blogItems = document.querySelectorAll("#blogList .blog_item");
+
+            blogItems.forEach(function (item) {
+                var title = item.querySelector(".blog-title").textContent.toLowerCase().trim();
+                if (title.includes(searchValue)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
+    </script>
 </body>
 </html>

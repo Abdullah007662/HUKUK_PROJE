@@ -12,10 +12,8 @@ namespace HUKUK_PROJE.Entities
         public string? Title { get; set; }
 
         [Column(TypeName = "VarChar")]
-        [StringLength(150)]
+        [StringLength(500)]
         public string? SmallTitle { get; set; }
-
-        [Column(TypeName = "VarChar")]
         public string? Description { get; set; }
 
         [Column(TypeName = "VarChar")]

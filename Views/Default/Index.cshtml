@@ -2,6 +2,9 @@
 @{
     Layout = null;
 }
+
+
+
 <!DOCTYPE html>
 <html lang="tr">
 
@@ -45,7 +48,6 @@
             height: 300px;
             resize: vertical;
         }
-
     </style>
 </head>
 
@@ -103,8 +105,9 @@
                 </div>
 
                 <div class="map_container">
-                    <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d190.4957353252148!2d29.06196366995573!3d40.188331962148816!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14ca3fa1b6f5e3e9%3A0x9e00905352242bd2!2zQXZ1a2F0IFrDvG1yw7x0IEZlcmlrIC0gWkQgSHVrdWsgRGFuxLHFn21hbmzEsWs!5e0!3m2!1str!2str!4v1744564136487!5m2!1str!2str&zoom=16" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
+
             </div>
         </div>
     </div>
@@ -127,8 +130,8 @@
                 .then(unavailableTimes => {
                     appointmentTime.innerHTML = '<option value="">Saat seçiniz</option>';
 
-                    for (let hour = 10; hour <= 18; hour++) {
-                        for (let min = 0; min < 60; min += 10) {
+                    for (let hour = 10; hour <= 17; hour++) {
+                        for (let min = 0; min <= 30; min += 30) {
                             const h = hour.toString().padStart(2, '0');
                             const m = min.toString().padStart(2, '0');
                             const timeStr = `${h}:${m}`;
@@ -165,11 +168,11 @@
             }
 
             const selectedTime = appointmentTime.value;
-            if (!selectedTime || selectedTime < "10:00" || selectedTime > "18:00") {
+            if (!selectedTime || selectedTime < "10:00" || selectedTime > "17:30") {
                 Swal.fire({
                     icon: 'warning',
                     title: 'Geçersiz Saat',
-                    text: 'Lütfen 10:00 ile 18:00 saatleri arasında bir saat seçiniz.',
+                    text: 'Lütfen 10:00 ile 17:30 saatleri arasında bir saat seçiniz.',
                     confirmButtonText: 'Tamam'
                 });
                 return;

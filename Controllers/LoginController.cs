@@ -88,7 +88,7 @@ public class LoginController : Controller
         if (user != null && user.ConfirmCode == model.Code)
         {
             await _signInManager.SignInAsync(user, true);
-            return RedirectToAction("Message", "Home");
+            return RedirectToAction("Index", "Message");
         }
 
         TempData["Error"] = "Girmiş olduğunuz kod yanlış.";

@@ -6,12 +6,12 @@ using SixLabors.ImageSharp.Processing;
 
 namespace HUKUK_PROJE.Controllers
 {
-    public class PracticeAreaController : Controller
+    public class BlogAdminController : Controller
     {
         private readonly HukukContext _context;
         private readonly IWebHostEnvironment _env;
 
-        public PracticeAreaController(HukukContext context, IWebHostEnvironment env)
+        public BlogAdminController(HukukContext context, IWebHostEnvironment env)
         {
             _context = context;
             _env = env;
@@ -19,7 +19,7 @@ namespace HUKUK_PROJE.Controllers
 
         public IActionResult Index()
         {
-            var values = _context.PracticeAreas.ToList();
+            var values = _context.Blogs.ToList();
             return View(values);
         }
         [HttpGet]
@@ -27,36 +27,63 @@ namespace HUKUK_PROJE.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public IActionResult Create(PracticeArea practiceArea)
+        public async Task<IActionResult> Create(Blog blog, IFormFile ImageFile)
         {
-            _context.PracticeAreas.Add(practiceArea);
+            if (ImageFile != null && ImageFile.Length > 0)
+            {
+                var extension = Path.GetExtension(ImageFile.FileName);
+                var imageName = Guid.NewGuid().ToString() + extension;
+                var savePath = Path.Combine(_env.WebRootPath, "Blogimages", imageName);
+
+                Directory.CreateDirectory(Path.GetDirectoryName(savePath)!);
+
+                using (var stream = new MemoryStream())
+                {
+                    await ImageFile.CopyToAsync(stream);
+                    stream.Position = 0;
+
+                    using var image = Image.Load(stream);
+                    image.Mutate(x => x.Resize(new ResizeOptions
+                    {
+                        Mode = ResizeMode.Max,
+                        Size = new Size(800, 600)
+                    }));
+
+                    await image.SaveAsync(savePath);
+                }
+
+                blog.ImageUrl = "/Blogimages/" + imageName;
+            }
+
+            _context.Blogs.Add(blog);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
         [HttpGet]
         public IActionResult Update(int id)
         {
-            var values = _context.PracticeAreas.Find(id);
-            return View(values);
+            var value = _context.Blogs.Find(id);
+            return View(value);
         }
         [HttpPost]
-        public async Task<IActionResult> Update(PracticeArea practiceArea, IFormFile? ImageFile)
+        public async Task<IActionResult> Update(Blog blog, IFormFile? ImageFile)
         {
-            var update = _context.PracticeAreas.Find(practiceArea.PracticeAreaID);
+            var update = _context.Blogs.Find(blog.BlogID);
 
             if (update == null)
                 return NotFound();
+            update.Title = blog.Title;
+            update.Description = blog.Description;
+            update.SmallTitle = blog.SmallTitle;
 
-            update.Title = practiceArea.Title;
-            update.Description= practiceArea.Description;
-            update.Icon= practiceArea.Icon;
 
             if (ImageFile != null && ImageFile.Length > 0)
             {
                 var extension = Path.GetExtension(ImageFile.FileName);
                 var imageName = Guid.NewGuid().ToString() + extension;
-                var savePath = Path.Combine(_env.WebRootPath, "PracticaAreaİmages", imageName);
+                var savePath = Path.Combine(_env.WebRootPath, "Blogimages", imageName);
 
                 Directory.CreateDirectory(Path.GetDirectoryName(savePath)!);
 
@@ -83,7 +110,7 @@ namespace HUKUK_PROJE.Controllers
                         System.IO.File.Delete(oldPath);
                 }
 
-                update.ImageUrl = "/PracticaAreaİmages/" + imageName;
+                update.ImageUrl = "/Blogimages/" + imageName;
             }
 
             _context.SaveChanges();
@@ -92,8 +119,8 @@ namespace HUKUK_PROJE.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var value = _context.PracticeAreas.Find(id);
-            _context.PracticeAreas.Remove(value!);
+            var values = _context.Blogs.Find(id);
+            _context.Blogs.Remove(values!);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }

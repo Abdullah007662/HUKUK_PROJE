@@ -1,0 +1,52 @@
+﻿@model UpdateUserViewModel
+@{
+    ViewData["Title"] = "Ayarlar";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+<h3 class="mb-4">Hesap Ayarları</h3>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<form asp-action="Index" method="post">
+    <div class="form-group">
+        <label for="UserName">Kullanıcı Adı</label>
+        <input asp-for="UserName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="Name">Ad Soyadı</label>
+        <input asp-for="NameSurname" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="Email">Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <hr />
+
+    <div class="form-group">
+        <label for="CurrentPassword">Mevcut Şifre</label>
+        <input asp-for="CurrentPassword" type="password" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="NewPassword">Yeni Şifre</label>
+        <input asp-for="NewPassword" type="password" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="ConfirmPassword">Yeni Şifre (Tekrar)</label>
+        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Güncelle</button>
+</form>

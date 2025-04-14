@@ -4,6 +4,7 @@ using HUKUK_PROJE.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HUKUKPROJE.Migrations
 {
     [DbContext(typeof(HukukContext))]
-    partial class HukukContextModelSnapshot : ModelSnapshot
+    [Migration("20250413183152_Mig_SmallTitle_Update")]
+    partial class MigSmallTitleUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -210,7 +213,7 @@ namespace HUKUKPROJE.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BlogID"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("VarChar");
 
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(300)

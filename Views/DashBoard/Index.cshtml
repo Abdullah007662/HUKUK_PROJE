@@ -1,0 +1,131 @@
+﻿@model List<Contact>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+
+<div class="container">
+    <div class="row justify-content-center mb-4">
+        <div class="col-12 text-end">
+            <i id="bannerClose"></i>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <!-- Orders -->
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8 grid-margin stretch-card">
+            <div class="card" style="min-height: 220px;">
+                <!-- Burada yüksekliği düşürdük -->
+                <div class="card-body text-center p-3">
+                    <br />
+                    <br />
+                    <!-- padding biraz azaltıldı -->
+                    <h5 class="mb-2 text-dark font-weight-normal">Hukuk Türleri</h5>
+                    <br />
+                    <br />
+                    <div class="dashboard-progress dashboard-progress-1 d-flex align-items-center justify-content-center item-parent position-relative" style="height: 70px;">
+                        <i class="mdi mdi-lightbulb icon-md text-dark" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></i>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <p class="mt-3 mb-0">Toplam</p>
+                    <h4 class="mb-0 font-weight-bold mt-1 text-dark">@ViewBag.type</h4>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <!-- Unique Visitors -->
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body text-center">
+                    <br />
+                    <h5 class="mb-2 text-dark font-weight-normal">Randevu Sayısı</h5>
+                    <br />
+                    <br>
+                    <div class="dashboard-progress dashboard-progress-2 d-flex align-items-center justify-content-center item-parent position-relative" style="height: 70px;">
+                        <i class="mdi mdi-account-circle icon-md absolute-center text-dark"></i>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <p class="mt-4 mb-0">Toplam</p>
+                    <h3 class="mb-0 font-weight-bold mt-2 text-dark">@ViewBag.ContactCount</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Impressions -->
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body text-center">
+                    <br />
+                    <h5 class="mb-2 text-dark font-weight-normal">Blog Sayısı</h5>
+                    <br />
+                    <br />
+                    <div class="dashboard-progress dashboard-progress-3 d-flex align-items-center justify-content-center item-parent position-relative" style="height: 70px;">
+                        <i class="mdi mdi-eye icon-md absolute-center text-dark"></i>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <p class="mt-4 mb-0">Toplam</p>
+                    <h3 class="mb-0 font-weight-bold mt-2 text-dark">@ViewBag.blogcount</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Followers -->
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body text-center">
+                    <br />
+                    <h5 class="mb-2 text-dark font-weight-normal">Hizmet Sayısı</h5>
+                    <br />
+                    <br />
+                    <div class="dashboard-progress dashboard-progress-4 d-flex align-items-center justify-content-center item-parent position-relative" style="height: 70px;">
+                        <i class="mdi mdi-cube icon-md absolute-center text-dark"></i>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <p class="mt-4 mb-0">Toplam</p>
+                    <h3 class="mb-0 font-weight-bold mt-2 text-dark">@ViewBag.service</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card-body">
+    <h4 class="card-title">Son 5 Randevu</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Ad Soyad</th>
+                <th>Email</th>
+                <th>Telefon Numarası</th>
+                <th>Tarih</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr class="table-info">
+                    <td>@(i + 1)</td>
+                    <td>@Model[i].NameSurname</td>
+                    <td>@Model[i].Email</td>
+                    <td>@Model[i].PhoneNumber</td>
+                    <td>@Model[i].AppointmentDate.ToString("dd.MM.yyyy")</td> <!-- Eğer CreateDate yoksa kaldır -->
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
