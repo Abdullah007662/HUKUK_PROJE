@@ -1,4 +1,4 @@
-﻿@model PracticeArea
+﻿@model Area
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Admin/Index.cshtml";
@@ -8,28 +8,26 @@
     <div class="row g-4">
         <div class="col-12">
             <div class="rounded h-100 p-4" style="background-color: #6c757d; color: #f8f9fa; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
-                <h6 class="mb-4">Hizmet Ekleme Sayfası</h6>
+                <h6 class="mb-4">Alan Ekleme Sayfası</h6>
                 <form method="post" enctype="multipart/form-data">
 
-                    <label>Hukuk Türü Seç</label>
-                    <select asp-for="LawTypesID" class="form-control bg-dark text-white border-0" asp-items="ViewBag.v1"></select>
+                    <label>Hukuk Türü</label>
+                    <select asp-for="LawTypesID" class="form-control bg-dark text-white border-0" asp-items="ViewBag.v1">
+                        <option disabled selected>Bir hukuk türü seçin</option>
+                    </select>
                     <br />
 
                     <label>Açıklama</label>
-                    <input type="text" asp-for="Description" class="form-control bg-dark text-white border-0" />
+                    <textarea asp-for="Description" rows="25" class="form-control bg-dark text-white border-0"></textarea>
                     <br />
-
-                    <label>İkon</label>
-                    <input type="text" asp-for="Icon" class="form-control bg-dark text-white border-0" />
-                    <br />
-
                     <label>Görsel Yükle</label>
                     <input type="file" name="ImageFile" class="form-control bg-dark text-white border-0" accept="image/*" />
                     <br />
 
-                    <button class="btn btn-primary">Hizmeti Ekle</button>
+                    <button class="btn btn-primary">Alanı Ekle</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+

@@ -39,6 +39,7 @@
     <Folder Include="wwwroot\lawyer-master\Banner\" />
     <Folder Include="wwwroot\lawyer-master\Blog\" />
     <Folder Include="wwwroot\lawyer-master\img\practice\" />
+    <Folder Include="wwwroot\AreaImages\" />
     <Folder Include="wwwroot\serviceimages\" />
   </ItemGroup>
 

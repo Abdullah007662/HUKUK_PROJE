@@ -1,0 +1,39 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    @await Component.InvokeAsync("_HeadPartials")
+</head>
+<body style="background-color: #f1f1f1; font-family: Arial, sans-serif;">
+
+    @await Component.InvokeAsync("_HeaderPartials")
+
+    <!-- ✅ Görselli içerik bloğu -->
+    <div class="container mt-5">
+        <div style="max-width: 800px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+
+            <!-- Görsel Kısmı -->
+            <div>
+                <img src="/images/your-image.jpg" alt="Görsel" style="width: 100%; height: auto; display: block;">
+            </div>
+
+            <!-- Yazılar Kısmı -->
+            <div style="padding: 24px;">
+                <h2 style="margin-bottom: 12px; color: #333;">Başlık Buraya</h2>
+                <p style="color: #555; line-height: 1.6;">
+                    Buraya açıklama yazabilirsiniz. Dilerseniz HTML ile zenginleştirilmiş içerik, bağlantılar, stil tanımları gibi şeyler de ekleyebilirsiniz.
+                </p>
+                <a href="#" style="color: #007bff; text-decoration: none;">Detayları Gör</a>
+            </div>
+
+        </div>
+    </div>
+    <!-- ✅ Bitiş -->
+    @await Component.InvokeAsync("_FooterPartials")
+    @await Component.InvokeAsync("_ScriptPartials")
+
+</body>
+</html>

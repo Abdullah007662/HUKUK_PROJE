@@ -35,5 +35,10 @@ namespace HUKUK_PROJE.Controllers
             var value = _context.Blogs.Find(id);
             return View(value);
         }
+        [HttpGet]
+        public IActionResult AreaDetails(int id)
+        {
+            return View();
+        }
     }
 }

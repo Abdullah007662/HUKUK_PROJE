@@ -1,0 +1,53 @@
+﻿@model List<Area>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h4 class="card-title">Alanları Listesi</h4>
+
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Hukuk Türü</th>
+                            <th>Açıklama</th>
+                            <th>Görsel</th>
+                            <th>Güncelle</th>
+                            <th>Detaylar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.AreaID</td>
+                                <td>@item.LawTypes!.Type</td>
+                                <td>@item.Description</td>
+                                <td>
+                                    <img src="@item.ImageUrl" style="width:100px;height:100px;border-radius:revert" />
+                                </td>
+                                <td>
+                                    <a href="/AreaAdmin/Update/@item.AreaID" class="btn btn-success">Güncelle</a>
+                                </td>
+                                <td>
+                                    <a href="/AreaAdmin/Update/@item.AreaID" class="btn btn-primary">Detaylar</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <br />
+                <a href="/AreaAdmin/Create/" class="btn btn-primary">Yeni Alan Girişi</a>
+            </div>
+        </div>
+    </div>
+</div>
+

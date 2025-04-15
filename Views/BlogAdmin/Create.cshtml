@@ -1,36 +1,137 @@
 ﻿@model Blog
+
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Admin/Index.cshtml";
 }
 
-<div class="container-fluid pt-4 px-4" style="background-color: #1e2124; min-height: 100vh;">
-    <div class="row g-4">
-        <div class="col-12">
-            <div class="rounded h-100 p-4" style="background-color: #6c757d; color: #f8f9fa; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
-                <h6 class="mb-4">Blog Ekleme Sayfası</h6>
-                <form method="post" enctype="multipart/form-data">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Ekleme Sayfası</title>
+    <!-- TinyMCE Script'i - API Anahtarıyla -->
+    <script src="https://cdn.tiny.cloud/1/kxdltrxw6nyvs3n8gp9fi4f0f7nx0avgvpxdqs0vm95961as/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
 
-                    <label>Başlık</label>
-                    <input type="text" asp-for="Title" class="form-control bg-dark text-white border-0" />
-                    <br />
+    <!-- CSS for modal -->
+    <style>
+        /* The Modal (background) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
 
-                    <label>Başlık 2</label>
-                    <input type="text" asp-for="Title" class="form-control bg-dark text-white border-0" />
-                    <br />
+        /* Modal Content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
 
-                    <label>Açıklama</label>
-                    <input type="text" asp-for="Description" class="form-control bg-dark text-white border-0" />
-                    <br />
+        /* Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
 
-                    <label>Görsel Yükle</label>
-                    <input type="file" name="ImageFile" class="form-control bg-dark text-white border-0" accept="image/*" />
-                    <br />
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+    </style>
+</head>
+<body>
 
-                    <button class="btn btn-primary">Blogu Ekle</button>
-                </form>
+    <div class="container-fluid pt-4 px-4" style="background-color: #1e2124; min-height: 100vh;">
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="rounded h-100 p-4" style="background-color: #6c757d; color: #f8f9fa; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
+                    <h6 class="mb-4">Blog Ekleme Sayfası</h6>
+                    <form method="post" enctype="multipart/form-data">
+
+                        <label>Başlık</label>
+                        <input type="text" asp-for="Title" class="form-control bg-dark text-white border-0" />
+                        <br />
+
+                        <label>Başlık 2</label>
+                        <input type="text" asp-for="Title" class="form-control bg-dark text-white border-0" />
+                        <br />
+
+                        <label>Açıklama</label>
+                        <!-- TinyMCE Editor ile açıklama alanı -->
+                        <textarea asp-for="Description" id="descriptionEditor" class="form-control bg-dark text-white border-0" rows="10"></textarea>
+                        <br />
+
+                        <label>Görsel Yükle</label>
+                        <input type="file" name="ImageFile" class="form-control bg-dark text-white border-0" accept="image/*" />
+                        <br />
+
+                        <button type="button" class="btn btn-info" id="previewBtn">Ön İzleme</button>
+                        <button type="submit" class="btn btn-primary">Blogu Ekle</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
+    <!-- The Modal for Preview -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h4>Blog Ön İzleme</h4>
+            <div id="previewContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // TinyMCE'yi başlatmak için yapılandırma
+        tinymce.init({
+            selector: '#descriptionEditor',  // Editörün kullanılacağı textarea id'si
+            plugins: [
+                'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'searchreplace', 'table', 'visualblocks', 'wordcount'
+            ],
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat'
+        });
+
+        // Modal (ön izleme popup) için gerekli elementler
+        var modal = document.getElementById("myModal");
+        var span = document.getElementsByClassName("close")[0];
+        var previewBtn = document.getElementById("previewBtn");
+
+        // Ön izleme butonuna tıklandığında modal'ı göster
+        previewBtn.onclick = function () {
+            var content = tinymce.get("descriptionEditor").getContent();
+            document.getElementById("previewContent").innerHTML = content;  // Editördeki içeriği modal'a yaz
+            modal.style.display = "block";  // Modal'ı göster
+        }
+
+        // Modal'ı kapatmak için X butonuna tıklama
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        // Modal dışına tıklanınca kapat
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>

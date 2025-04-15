@@ -1,0 +1,26 @@
+﻿@model HUKUK_PROJE.Entities.LawTypes
+@{
+    ViewData["Title"] = "Hukuk Türü Güncelle";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+<div class="container-fluid pt-4 px-4" style="background-color: #1e2124; min-height: 100vh;">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="rounded h-100 p-4" style="background-color: #6c757d; color: #f8f9fa; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
+                <h4 class="mb-4">Hukuk Türü Güncelle</h4>
+                <form asp-action="Update" method="post">
+                    <input type="hidden" asp-for="LawTypesID" />
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Type" class="form-label">Hukuk Türü Adı</label>
+                        <input asp-for="Type" class="form-control bg-dark text-white border-0" />
+                        <span asp-validation-for="Type" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-success">Güncelle</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

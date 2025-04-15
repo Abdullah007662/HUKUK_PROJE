@@ -4,6 +4,7 @@ using HUKUK_PROJE.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HUKUKPROJE.Migrations
 {
     [DbContext(typeof(HukukContext))]
-    partial class HukukContextModelSnapshot : ModelSnapshot
+    [Migration("20250414225841_Mig_add_PracticaArea_")]
+    partial class MigaddPracticaArea
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,30 +179,6 @@ namespace HUKUKPROJE.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("HUKUK_PROJE.Entities.Area", b =>
-                {
-                    b.Property<int>("AreaID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AreaID"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LawTypesID")
-                        .HasColumnType("int");
-
-                    b.HasKey("AreaID");
-
-                    b.HasIndex("LawTypesID");
-
-                    b.ToTable("Areas");
-                });
-
             modelBuilder.Entity("HUKUK_PROJE.Entities.Banner", b =>
                 {
                     b.Property<int>("BannerID")
@@ -344,6 +323,42 @@ namespace HUKUKPROJE.Migrations
                     b.HasKey("LawTypesID");
 
                     b.ToTable("LawTypes");
+                });
+
+            modelBuilder.Entity("HUKUK_PROJE.Entities.PracticeArea", b =>
+                {
+                    b.Property<int>("PracticeAreaID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PracticeAreaID"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(150)
+                        .HasColumnType("VarChar");
+
+                    b.Property<string>("Description2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(50)
+                        .HasColumnType("VarChar");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(300)
+                        .HasColumnType("VarChar");
+
+                    b.Property<string>("ImageUrl2")
+                        .HasMaxLength(300)
+                        .HasColumnType("VarChar");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(150)
+                        .HasColumnType("VarChar");
+
+                    b.HasKey("PracticeAreaID");
+
+                    b.ToTable("PracticeAreas");
                 });
 
             modelBuilder.Entity("HUKUK_PROJE.Entities.Service", b =>
@@ -499,51 +514,6 @@ namespace HUKUKPROJE.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("PracticeArea", b =>
-                {
-                    b.Property<int>("PracticeAreaID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PracticeAreaID"));
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(150)
-                        .HasColumnType("VarChar");
-
-                    b.Property<string>("Icon")
-                        .HasMaxLength(50)
-                        .HasColumnType("VarChar");
-
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(300)
-                        .HasColumnType("VarChar");
-
-                    b.Property<int>("LawTypesID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(150)
-                        .HasColumnType("VarChar");
-
-                    b.HasKey("PracticeAreaID");
-
-                    b.HasIndex("LawTypesID");
-
-                    b.ToTable("PracticeAreas");
-                });
-
-            modelBuilder.Entity("HUKUK_PROJE.Entities.Area", b =>
-                {
-                    b.HasOne("HUKUK_PROJE.Entities.LawTypes", "LawTypes")
-                        .WithMany()
-                        .HasForeignKey("LawTypesID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LawTypes");
-                });
-
             modelBuilder.Entity("HUKUK_PROJE.Entities.Contact", b =>
                 {
                     b.HasOne("HUKUK_PROJE.Entities.LawTypes", "LawTypes")
@@ -602,17 +572,6 @@ namespace HUKUKPROJE.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("PracticeArea", b =>
-                {
-                    b.HasOne("HUKUK_PROJE.Entities.LawTypes", "LawTypes")
-                        .WithMany()
-                        .HasForeignKey("LawTypesID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LawTypes");
                 });
 #pragma warning restore 612, 618
         }

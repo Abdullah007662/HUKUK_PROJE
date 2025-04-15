@@ -32,5 +32,6 @@ namespace HUKUK_PROJE.Context
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<PracticeArea> PracticeAreas { get; set; }
+        public DbSet<Area> Areas { get; set; }
     }
 }
