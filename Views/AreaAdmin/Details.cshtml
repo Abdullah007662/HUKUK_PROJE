@@ -1,6 +1,6 @@
 ﻿@model Area
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Details";
     Layout = "~/Views/Admin/Index.cshtml";
 }
 
@@ -11,8 +11,9 @@
     <div class="row g-4">
         <div class="col-12">
             <div class="rounded h-100 p-4" style="background-color: #6c757d; color: #f8f9fa; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
-                <h6 class="mb-4">Alan Ekleme Sayfası</h6>
+                <h6 class="mb-4">Alan Detay Sayfası</h6>
                 <form method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="AreaID" />
 
                     <label>Hukuk Türü</label>
                     <select asp-for="LawTypesID" class="form-control bg-dark text-white border-0" asp-items="ViewBag.v1">
@@ -21,30 +22,43 @@
                     <br />
 
                     <label>Açıklama</label>
-                    <!-- TinyMCE Editörlü alan -->
-                    <textarea asp-for="Description" id="descriptionEditor" class="form-control bg-dark text-white border-0" rows="10"></textarea>
+                    <!-- TinyMCE Editörlü alan (sadece okunabilir) -->
+                    <textarea asp-for="Description" id="descriptionEditor" class="form-control bg-white text-white border-0" rows="10"></textarea>
                     <br />
 
-                    <label>Görsel Yükle</label>
-                    <input type="file" name="ImageFile" class="form-control bg-dark text-white border-0" accept="image/*" />
+                    <label>Mevcut Görsel</label><br />
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl" alt="Görsel" width="150" class="mb-2" />
+                    }
+                    else
+                    {
+                        <p style="color: red;">Görsel bulunamadı.</p>
+                    }
+                    <br />
+                    <br />
                     <br />
 
-                    <button class="btn btn-primary">Alanı Ekle</button>
+                    <a href="/AreaAdmin/Index/" class="btn btn-primary">Alan Sayfasına Dön</a>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-<!-- TinyMCE Başlatma -->
+<!-- TinyMCE Başlatma - Readonly olarak -->
 <script>
     tinymce.init({
         selector: '#descriptionEditor',
+        readonly: true,
+        menubar: false,
+        toolbar: false,
+        statusbar: false,
         plugins: [
             'anchor', 'autolink', 'charmap', 'codesample', 'emoticons',
             'image', 'link', 'lists', 'searchreplace', 'table',
             'visualblocks', 'wordcount'
         ],
-        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat'
+        content_style: "body { background-color: #343a40; color: white; font-size: 16px; }"
     });
 </script>

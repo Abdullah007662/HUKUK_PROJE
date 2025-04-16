@@ -91,7 +91,7 @@ namespace HUKUK_PROJE.Controllers
             if (update == null) return NotFound();
 
             update.Description = area.Description;
-            update.LawTypesID = area.LawTypesID; // Navigation üzerinden değil, FK üzerinden atama
+            update.LawTypesID = area.LawTypesID;
 
             if (ImageFile != null && ImageFile.Length > 0)
             {
@@ -116,7 +116,7 @@ namespace HUKUK_PROJE.Controllers
                     await image.SaveAsync(savePath);
                 }
 
-                // Eski resmi sil
+                // Eski görseli sil
                 if (!string.IsNullOrEmpty(update.ImageUrl))
                 {
                     var oldPath = Path.Combine(_env.WebRootPath, update.ImageUrl.TrimStart('/'));
@@ -129,6 +129,19 @@ namespace HUKUK_PROJE.Controllers
 
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            ViewBag.v1 = _context.LawTypes
+                .Select(x => new SelectListItem
+                {
+                    Text = x.Type,
+                    Value = x.LawTypesID.ToString()
+                }).ToList();
+
+            var value = _context.Areas.Find(id);
+            return View(value);
         }
 
     }

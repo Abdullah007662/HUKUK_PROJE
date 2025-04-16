@@ -13,6 +13,17 @@ namespace HUKUK_PROJE.Context
         {
             _configuration = configuration;
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<PracticeArea>()
+                .HasOne(p => p.Area)
+                .WithMany()
+                .HasForeignKey(p => p.AreaID)
+                .OnDelete(DeleteBehavior.Restrict); // veya DeleteBehavior.NoAction
+        }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

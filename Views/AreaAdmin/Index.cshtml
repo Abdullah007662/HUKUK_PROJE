@@ -1,11 +1,23 @@
-﻿@model List<Area>
+﻿@model List<HUKUK_PROJE.Entities.Area>
+@using System.Text.RegularExpressions;
+@using System.Web;
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Admin/Index.cshtml";
+
+    string StripHtml(string input)
+    {
+        return Regex.Replace(HttpUtility.HtmlDecode(input ?? ""), "<.*?>", string.Empty);
+    }
+
+    string Shorten(string input, int length)
+    {
+        if (string.IsNullOrEmpty(input)) return "";
+        var clean = StripHtml(input);
+        return clean.Length <= length ? clean : clean.Substring(0, length) + "...";
+    }
 }
-
-
-
 
 <div class="container-fluid">
     <div class="row">
@@ -30,7 +42,7 @@
                             <tr>
                                 <td>@item.AreaID</td>
                                 <td>@item.LawTypes!.Type</td>
-                                <td>@item.Description</td>
+                                <td>@Shorten(item.Description!, 11)</td>
                                 <td>
                                     <img src="@item.ImageUrl" style="width:100px;height:100px;border-radius:revert" />
                                 </td>
@@ -38,7 +50,7 @@
                                     <a href="/AreaAdmin/Update/@item.AreaID" class="btn btn-success">Güncelle</a>
                                 </td>
                                 <td>
-                                    <a href="/AreaAdmin/Update/@item.AreaID" class="btn btn-primary">Detaylar</a>
+                                    <a href="/AreaAdmin/Details/@item.AreaID" class="btn btn-primary">Detaylar</a>
                                 </td>
                             </tr>
                         }
@@ -50,4 +62,3 @@
         </div>
     </div>
 </div>
-

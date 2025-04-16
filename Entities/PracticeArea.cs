@@ -27,4 +27,8 @@ public class PracticeArea
 
     // Navigation Property
     public LawTypes? LawTypes { get; set; }
+
+    public int? AreaID { get; set; }  // Foreign key
+    public Area? Area { get; set; }  // Navigation property
+
 }
