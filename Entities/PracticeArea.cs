@@ -23,7 +23,7 @@ public class PracticeArea
     public string? ImageUrl { get; set; }
 
     // Foreign Key
-    public int LawTypesID { get; set; }
+    public int? LawTypesID { get; set; }
 
     // Navigation Property
     public LawTypes? LawTypes { get; set; }

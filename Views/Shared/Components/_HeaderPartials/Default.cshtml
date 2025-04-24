@@ -1,97 +1,134 @@
-﻿<head>
-    <!-- Font Awesome CDN -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-</head>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kaydırınca Navbar Gizleme</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
 
-<header>
-    <div class="header-area">
-        <div id="sticky-header" class="main-header-area">
-            <div class="container-fluid p-0">
-                <div class="row align-items-center justify-content-between no-gutters">
-                    <div class="col-xl-2 col-lg-2">
-                        <div class="logo-img">
-                            <a href="index.html">
-                                <img src="~/lawyer-master/img/Logoo.png" alt="">
-                            </a>
+        .logo-img img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .header-area {
+            background-color: black;
+            padding: 20px 0;
+            z-index: 1000;
+            transition: top 0.3s ease; /* Animasyon */
+        }
+
+        .main-header-area {
+            width: 100%;
+            background-color: black;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-menu ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+            .main-menu ul li {
+                margin: 0 20px;
+            }
+
+                .main-menu ul li a {
+                    text-decoration: none;
+                    color: #fff;
+                    font-weight: bold;
+                }
+
+                    .main-menu ul li a:hover {
+                        color: #007bff;
+                    }
+
+        /* Gizleme için kullanılacak sınıf */
+        .hide-navbar {
+            top: -100px !important; /* Navbar'ı yukarı iter */
+        }
+
+        /* Sabitleme */
+        .header-area {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        /* Sayfa içeriği navbarın altında başlasın */
+        .content {
+            padding-top: 120px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-area" id="navbar">
+            <div class="main-header-area">
+                <div class="container-fluid p-0">
+                    <div class="row align-items-center justify-content-between no-gutters">
+                        <div class="col-xl-2 col-lg-2">
+                            <div class="logo-img">
+                                <a href="/Default/Index/">
+                                    <img src="~/lawyer-master/img/LOGO/ZDLOGO.jpg" alt="">
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xl-7 col-lg-8">
-                        <div class="main-menu d-none d-lg-block">
-                            <nav>
-                                <ul id="navigation">
-                                    <li><a class="active" href="index.html">home</a></li>
-                                    <li><a href="about.html">About</a></li>
-                                    <li><a href="Practice.html">Practice Area</a></li>
-                                    <li>
-                                        <a href="#">blog <i class="ti-angle-down"></i></a>
-                                        <ul class="submenu">
-                                            <li><a href="blog.html">blog</a></li>
-                                            <li><a href="single-blog.html">single-blog</a></li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#">pages <i class="ti-angle-down"></i></a>
-                                        <ul class="submenu">
-                                            <li><a href="elements.html">elements</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="contact.html">Contact</a></li>
-                                </ul>
-                            </nav>
+                        <div class="col-xl-7 col-lg-8">
+                            <div class="main-menu d-none d-lg-block">
+                                <nav>
+                                    <ul id="navigation">
+                                        <li><a href="/Default/Index/">Ana Sayfa</a></li>
+                                        <li><a href="/About/Index/">Hakkımızda</a></li>
+                                        <li><a href="/PracticeAreas/Index/">Practice Area</a></li>
+                                        <li>
+                                            <a href="#">blog <i class="ti-angle-down"></i></a>
+                                            <ul class="submenu">
+                                                <li><a href="/Blog/Index/">blog</a></li>
+                                                <li><a href="single-blog.html">single-blog</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="contact.html">Contact</a></li>
+                                    </ul>
+                                </nav>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-2 d-none d-lg-block">
-                    </div>
-                    <div class="col-12">
-                        <div class="mobile_menu d-block d-lg-none"></div>
+                        <div class="col-xl-3 col-lg-2 d-none d-lg-block"></div>
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
+    <!-- JavaScript ile scroll kontrolü -->
+    <script>
+        let lastScrollTop = 0;
+        const navbar = document.getElementById("navbar");
 
-<style>
-    /* Logo boyutunu küçültmek için CSS */
-    .logo-img img {
-        max-width: 150px; /* Logo genişliğini 150px ile sınırlandırır */
-        height: auto; /* Yüksekliği, genişlik ile orantılı şekilde otomatik olarak ayarlanır */
-    }
+        window.addEventListener("scroll", function () {
+            let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
-    /* Menü için genel stil */
-    .header-area {
-        background-color: black; /* Header alanının arka plan rengini siyah yapar */
-        padding: 20px 0; /* Header alanına üst ve alt kısımlarda 20px'lik boşluk ekler */
-        z-index: 1000; /* Diğer öğelerin üstünde olacak şekilde */
-    }
-
-    .main-header-area {
-        position: fixed; /* Sayfa kaydırıldığında üstte sabit kalmasını sağlar */
-        top: 0;
-        left: 0;
-        width: 100%;
-        background-color: black; /* Sabitlenen header'ın arka planı */
-        z-index: 1000; /* Menü, diğer öğelerin üstünde olacak */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge ekler */
-    }
-
-    .main-menu ul {
-        display: flex; /* Menü öğelerini yatayda hizalar */
-        list-style: none; /* Menüdeki listelerin varsayılan işaretçilerini (noktalar) kaldırır */
-        padding: 0; /* Menüdeki öğelerin etrafındaki padding'i sıfırlar */
-    }
-
-        .main-menu ul li {
-            margin: 0 20px; /* Menü öğeleri arasına 20px'lik yatay boşluk ekler */
-        }
-
-            .main-menu ul li a {
-                text-decoration: none; /* Linklerin altını çizer (default) kaldırır */
-                color: #fff; /* Linklerin rengini beyaz yapar */
-                font-weight: bold; /* Link metnini kalın yapar */
+            if (currentScroll > lastScrollTop) {
+                // Aşağı kaydırılıyor
+                navbar.classList.add("hide-navbar");
+            } else {
+                // Yukarı kaydırılıyor
+                navbar.classList.remove("hide-navbar");
             }
 
-                .main-menu ul li a:hover {
-                    color: #007bff; /* Menü öğelerine üzerine gelindiğinde renk değişir */
-                }
-</style>
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+        });
+    </script>
+
+</body>
+</html>

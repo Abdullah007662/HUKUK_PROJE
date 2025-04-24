@@ -110,7 +110,7 @@ namespace HUKUK_PROJE.Controllers
                     Text = x.Type,
                     Value = x.LawTypesID.ToString()
                 }).ToList();
-            var banner1 = _hukukContext.Banners.FirstOrDefault(x => x.BannerID == 1); // veya istediğin mantık
+            var banner1 = _hukukContext.Banners.FirstOrDefault(x => x.BannerID == 1); 
             var banner2 = _hukukContext.Banners.FirstOrDefault(x => x.BannerID == 2);
 
             ViewBag.Banner1Image = banner1?.ImageUrl ?? "img/banner/default1.jpg";

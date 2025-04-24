@@ -1,9 +1,11 @@
 ﻿using HUKUK_PROJE.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HUKUK_PROJE.Controllers
 {
+    [AllowAnonymous]
     public class AreaController : Controller
     {
         private readonly HukukContext _context;

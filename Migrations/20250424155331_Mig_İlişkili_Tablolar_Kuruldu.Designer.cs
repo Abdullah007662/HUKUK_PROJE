@@ -4,6 +4,7 @@ using HUKUK_PROJE.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HUKUKPROJE.Migrations
 {
     [DbContext(typeof(HukukContext))]
-    partial class HukukContextModelSnapshot : ModelSnapshot
+    [Migration("20250424155331_Mig_İlişkili_Tablolar_Kuruldu")]
+    partial class MigİlişkiliTablolarKuruldu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

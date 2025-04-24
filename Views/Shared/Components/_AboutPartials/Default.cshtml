@@ -1,4 +1,5 @@
 ﻿@model List<About>
+
 <div class="about_area">
     <div class="opacity_icon d-none d-lg-block">
         <i class="flaticon-balance"></i>
@@ -10,7 +11,7 @@
                 <div class="col-xl-6 col-md-6">
                     <div class="single_about_info text-center">
                         <div class="about_thumb">
-                            <img src="/aboutimages/1.png" alt="">
+                            <img src="@item.ImageUrl" alt="">
                         </div>
                         <h3>
                             @item.Title<br>
@@ -27,56 +28,133 @@
 </div>
 
 <style>
-    /* Sayfayı ortalamak için düzenleme */
     .about_area {
         display: flex;
-        justify-content: center; /* Yatayda ortalama */
-        align-items: center; /* Dikeyde ortalama */
-        height: 100vh; /* Sayfa yüksekliği kadar */
-        padding: 0; /* İç boşluğu kaldır */
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 0;
+        position: relative;
+    }
+
+    .opacity_icon {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .opacity_icon i {
+        font-size: 500px;
+        color: #FEFAEF;
     }
 
     .container {
         display: flex;
-        flex-direction: column; /* İçerik sütun olarak düzenlendi */
-        align-items: center; /* Yatayda ortalama */
-        padding: 0 15px; /* Sağ ve sol kenarlardan biraz boşluk */
+        flex-direction: column;
+        align-items: center;
+        padding: 0 15px;
     }
 
     .row {
         display: flex;
-        justify-content: center; /* Yatayda öğeleri ortalamak */
-        flex-wrap: wrap; /* Öğeleri alt satıra kaydırmak */
+        justify-content: center;
+        flex-wrap: wrap;
         width: 100%;
     }
 
     .col-xl-6, .col-md-6 {
         display: flex;
-        justify-content: center; /* Yatayda ortalama */
-        align-items: center; /* Dikeyde ortalama */
-        text-align: center; /* İçeriklerin ortalanması */
-        padding: 10px; /* Her öğe arasında boşluk bırakmak */
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 10px;
     }
 
     .single_about_info {
-        max-width: 500px; /* Öğelerin maksimum genişliği */
+        max-width: 500px;
         padding: 20px;
     }
 
+    .about_thumb {
+        overflow: hidden;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        margin: auto;
+        position: relative;
+    }
+
     .about_thumb img {
-        max-width: 100%; /* Resimlerin kapsayıcıya göre genişliği */
-        height: auto;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
     }
 
     .single_about_info h3 {
-        margin-top: 15px;
-        font-size: 2rem; /* Başlık boyutunu büyütmek */
+        margin-top: 27px;
+        font-size: 36px;
+        font-weight: 400;
+        line-height: 48px;
+        margin-bottom: 13px;
         color: #333;
     }
 
     .single_about_info p {
-        font-size: 1.2rem; /* Yazı boyutunu büyütmek */
+        font-size: 16px;
+        line-height: 28px;
         color: #666;
-        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    @@media (max-width: 767px) {
+        .about_area {
+            margin-left: 0;
+            margin-right: 0;
+            padding-top: 80px;
+            padding-bottom: 80px;
+            height: auto;
+            flex-direction: column;
+        }
+
+        .about_thumb {
+            margin-top: 30px;
+        }
+
+        .single_about_info h3 {
+            margin-top: 30px;
+            font-size: 25px;
+            line-height: 35px;
+            margin-bottom: 30px;
+        }
+
+        .single_about_info p br {
+            display: none;
+        }
+    }
+
+    @@media (min-width: 768px) and (max-width: 991px) {
+        .single_about_info h3 {
+            margin-top: 30px;
+            font-size: 25px;
+            line-height: 35px;
+            margin-bottom: 30px;
+        }
+
+        .single_about_info p {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .single_about_info p br {
+            display: none;
+        }
+    }
+
+    @@media (min-width: 992px) and (max-width: 1200px) {
+        .single_about_info p br {
+            display: none;
+        }
     }
 </style>

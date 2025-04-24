@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HUKUK_PROJE.Controllers
 {
     [AllowAnonymous]
-    public class AboutController : Controller
+    public class PracticeAreasController : Controller
     {
         public IActionResult Index()
         {

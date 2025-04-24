@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HUKUKPROJE.Migrations
 {
     [DbContext(typeof(HukukContext))]
-    [Migration("20250416004019_Mig_ilişkiseltablolarrrr")]
-    partial class Migilişkiseltablolarrrr
+    [Migration("20250424161232_Fix_LawTypes_Relation")]
+    partial class FixLawTypesRelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -193,7 +193,7 @@ namespace HUKUKPROJE.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LawTypesID")
+                    b.Property<int?>("LawTypesID")
                         .HasColumnType("int");
 
                     b.HasKey("AreaID");
@@ -297,6 +297,22 @@ namespace HUKUKPROJE.Migrations
                     b.HasIndex("LawTypesID");
 
                     b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("HUKUK_PROJE.Entities.Deneme", b =>
+                {
+                    b.Property<int>("DenemeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DenemeId"));
+
+                    b.Property<int>("Name")
+                        .HasColumnType("int");
+
+                    b.HasKey("DenemeId");
+
+                    b.ToTable("Denemes");
                 });
 
             modelBuilder.Entity("HUKUK_PROJE.Entities.Employee", b =>
@@ -525,7 +541,7 @@ namespace HUKUKPROJE.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("VarChar");
 
-                    b.Property<int>("LawTypesID")
+                    b.Property<int?>("LawTypesID")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -546,8 +562,7 @@ namespace HUKUKPROJE.Migrations
                     b.HasOne("HUKUK_PROJE.Entities.LawTypes", "LawTypes")
                         .WithMany()
                         .HasForeignKey("LawTypesID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("LawTypes");
                 });
@@ -622,8 +637,7 @@ namespace HUKUKPROJE.Migrations
                     b.HasOne("HUKUK_PROJE.Entities.LawTypes", "LawTypes")
                         .WithMany()
                         .HasForeignKey("LawTypesID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Area");
 

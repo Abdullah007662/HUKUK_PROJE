@@ -31,7 +31,6 @@ namespace HUKUKPROJE.Migrations
                 table: "Areas",
                 type: "int",
                 nullable: false,
-                defaultValue: 0,
                 oldClrType: typeof(int),
                 oldType: "int",
                 oldNullable: true);
