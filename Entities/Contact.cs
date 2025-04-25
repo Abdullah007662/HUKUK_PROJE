@@ -14,19 +14,13 @@ namespace HUKUK_PROJE.Entities
 
         [Required(ErrorMessage = "Email gereklidir.")]
         [EmailAddress(ErrorMessage = "Geçerli bir email adresi giriniz.")]
+        [StringLength(150)]
         public string? Email { get; set; }
 
         [Required(ErrorMessage = "Telefon numarası gereklidir.")]
-        [StringLength(15)]
+        [StringLength(11)]
         public string? PhoneNumber { get; set; }
 
-        [Required(ErrorMessage = "Randevu tarihi gereklidir.")]
-        public DateTime AppointmentDate { get; set; }
-
-        [Required(ErrorMessage = "Randevu saati gereklidir.")]
-        [DataType(DataType.Time)]
-        public TimeSpan AppointmentTime { get; set; }
-        [Required(ErrorMessage = "Kısaca Olayı Anlatınız.!")]
         [StringLength(500)]
         public string? Message { get; set; }
         public LawTypes? LawTypes { get; set; }

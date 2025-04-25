@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HUKUKPROJE.Migrations
 {
     /// <inheritdoc />
-    public partial class İdentity : Migration
+    public partial class MigRandevuuonlydeneme : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,10 +17,10 @@ namespace HUKUKPROJE.Migrations
                 {
                     AboutID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "VarChar(30)", maxLength: 30, nullable: true),
+                    Title = table.Column<string>(type: "VarChar(150)", maxLength: 150, nullable: true),
+                    Title2 = table.Column<string>(type: "VarChar(150)", maxLength: 150, nullable: true),
                     Description = table.Column<string>(type: "VarChar(500)", maxLength: 500, nullable: true),
-                    ImageUrl = table.Column<string>(type: "VarChar(200)", maxLength: 200, nullable: true),
-                    SignatureUrl = table.Column<string>(type: "VarChar(200)", maxLength: 200, nullable: true)
+                    ImageUrl = table.Column<string>(type: "VarChar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -62,6 +62,7 @@ namespace HUKUKPROJE.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConfirmCode = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -90,11 +91,41 @@ namespace HUKUKPROJE.Migrations
                     BannerID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "VarChar(150)", maxLength: 150, nullable: true),
-                    Description = table.Column<string>(type: "VarChar(500)", maxLength: 500, nullable: true)
+                    Description = table.Column<string>(type: "VarChar(500)", maxLength: 500, nullable: true),
+                    ImageUrl = table.Column<string>(type: "VarChar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Banners", x => x.BannerID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Blogs",
+                columns: table => new
+                {
+                    BlogID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "VarChar(150)", maxLength: 150, nullable: true),
+                    SmallTitle = table.Column<string>(type: "VarChar(500)", maxLength: 500, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "VarChar(300)", maxLength: 300, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Blogs", x => x.BlogID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Denemes",
+                columns: table => new
+                {
+                    DenemeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Denemes", x => x.DenemeId);
                 });
 
             migrationBuilder.CreateTable(
@@ -103,7 +134,7 @@ namespace HUKUKPROJE.Migrations
                 {
                     EmployeeID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "VarChar(150)", maxLength: 150, nullable: true),
+                    NameSurname = table.Column<string>(type: "VarChar(25)", maxLength: 25, nullable: true),
                     Department = table.Column<string>(type: "VarChar(30)", maxLength: 30, nullable: true),
                     InstagramUrl = table.Column<string>(type: "VarChar(200)", maxLength: 200, nullable: true),
                     TwitterUrl = table.Column<string>(type: "VarChar(150)", maxLength: 150, nullable: true),
@@ -264,6 +295,27 @@ namespace HUKUKPROJE.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Areas",
+                columns: table => new
+                {
+                    AreaID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LawTypesID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Areas", x => x.AreaID);
+                    table.ForeignKey(
+                        name: "FK_Areas_LawTypes_LawTypesID",
+                        column: x => x.LawTypesID,
+                        principalTable: "LawTypes",
+                        principalColumn: "LawTypesID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Contacts",
                 columns: table => new
                 {
@@ -272,10 +324,7 @@ namespace HUKUKPROJE.Migrations
                     NameSurname = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    AppointmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AppointmentTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    LawTypeID = table.Column<int>(type: "int", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     LawTypesID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -287,6 +336,41 @@ namespace HUKUKPROJE.Migrations
                         principalTable: "LawTypes",
                         principalColumn: "LawTypesID");
                 });
+
+            migrationBuilder.CreateTable(
+                name: "PracticeAreas",
+                columns: table => new
+                {
+                    PracticeAreaID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Icon = table.Column<string>(type: "VarChar(50)", maxLength: 50, nullable: true),
+                    Title = table.Column<string>(type: "VarChar(150)", maxLength: 150, nullable: true),
+                    Description = table.Column<string>(type: "VarChar(150)", maxLength: 150, nullable: true),
+                    ImageUrl = table.Column<string>(type: "VarChar(300)", maxLength: 300, nullable: true),
+                    LawTypesID = table.Column<int>(type: "int", nullable: true),
+                    AreaID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PracticeAreas", x => x.PracticeAreaID);
+                    table.ForeignKey(
+                        name: "FK_PracticeAreas_Areas_AreaID",
+                        column: x => x.AreaID,
+                        principalTable: "Areas",
+                        principalColumn: "AreaID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_PracticeAreas_LawTypes_LawTypesID",
+                        column: x => x.LawTypesID,
+                        principalTable: "LawTypes",
+                        principalColumn: "LawTypesID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Areas_LawTypesID",
+                table: "Areas",
+                column: "LawTypesID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -331,6 +415,16 @@ namespace HUKUKPROJE.Migrations
                 name: "IX_Contacts_LawTypesID",
                 table: "Contacts",
                 column: "LawTypesID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PracticeAreas_AreaID",
+                table: "PracticeAreas",
+                column: "AreaID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PracticeAreas_LawTypesID",
+                table: "PracticeAreas",
+                column: "LawTypesID");
         }
 
         /// <inheritdoc />
@@ -361,10 +455,19 @@ namespace HUKUKPROJE.Migrations
                 name: "Banners");
 
             migrationBuilder.DropTable(
+                name: "Blogs");
+
+            migrationBuilder.DropTable(
                 name: "Contacts");
 
             migrationBuilder.DropTable(
+                name: "Denemes");
+
+            migrationBuilder.DropTable(
                 name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "PracticeAreas");
 
             migrationBuilder.DropTable(
                 name: "Services");
@@ -377,6 +480,9 @@ namespace HUKUKPROJE.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Areas");
 
             migrationBuilder.DropTable(
                 name: "LawTypes");

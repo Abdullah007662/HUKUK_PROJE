@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HUKUKPROJE.Migrations
 {
     [DbContext(typeof(HukukContext))]
-    [Migration("20250413003758_MigSon")]
-    partial class MigSon
+    [Migration("20250425193005_Mig_Randevuuonly_deneme")]
+    partial class MigRandevuuonlydeneme
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,20 +38,20 @@ namespace HUKUKPROJE.Migrations
                         .HasColumnType("VarChar");
 
                     b.Property<string>("ImageUrl")
-                        .HasMaxLength(200)
-                        .HasColumnType("VarChar");
-
-                    b.Property<string>("SignatureUrl")
-                        .HasMaxLength(200)
+                        .HasMaxLength(500)
                         .HasColumnType("VarChar");
 
                     b.Property<string>("Title")
-                        .HasMaxLength(30)
+                        .HasMaxLength(150)
+                        .HasColumnType("VarChar");
+
+                    b.Property<string>("Title2")
+                        .HasMaxLength(150)
                         .HasColumnType("VarChar");
 
                     b.HasKey("AboutID");
 
-                    b.ToTable("Abouts");
+                    b.ToTable("Abouts", (string)null);
                 });
 
             modelBuilder.Entity("HUKUK_PROJE.Entities.Admin", b =>
@@ -179,6 +179,30 @@ namespace HUKUKPROJE.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("HUKUK_PROJE.Entities.Area", b =>
+                {
+                    b.Property<int>("AreaID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AreaID"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("LawTypesID")
+                        .HasColumnType("int");
+
+                    b.HasKey("AreaID");
+
+                    b.HasIndex("LawTypesID");
+
+                    b.ToTable("Areas");
+                });
+
             modelBuilder.Entity("HUKUK_PROJE.Entities.Banner", b =>
                 {
                     b.Property<int>("BannerID")
@@ -188,6 +212,10 @@ namespace HUKUKPROJE.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BannerID"));
 
                     b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("VarChar");
+
+                    b.Property<string>("ImageUrl")
                         .HasMaxLength(500)
                         .HasColumnType("VarChar");
 
@@ -209,14 +237,14 @@ namespace HUKUKPROJE.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BlogID"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("VarChar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(300)
                         .HasColumnType("VarChar");
 
                     b.Property<string>("SmallTitle")
-                        .HasMaxLength(150)
+                        .HasMaxLength(500)
                         .HasColumnType("VarChar");
 
                     b.Property<string>("Title")
@@ -236,12 +264,6 @@ namespace HUKUKPROJE.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContactID"));
 
-                    b.Property<DateTime>("AppointmentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<TimeSpan>("AppointmentTime")
-                        .HasColumnType("time");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -250,7 +272,6 @@ namespace HUKUKPROJE.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -269,6 +290,22 @@ namespace HUKUKPROJE.Migrations
                     b.HasIndex("LawTypesID");
 
                     b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("HUKUK_PROJE.Entities.Deneme", b =>
+                {
+                    b.Property<int>("DenemeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DenemeId"));
+
+                    b.Property<int>("Name")
+                        .HasColumnType("int");
+
+                    b.HasKey("DenemeId");
+
+                    b.ToTable("Denemes");
                 });
 
             modelBuilder.Entity("HUKUK_PROJE.Entities.Employee", b =>
@@ -474,6 +511,55 @@ namespace HUKUKPROJE.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PracticeArea", b =>
+                {
+                    b.Property<int>("PracticeAreaID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PracticeAreaID"));
+
+                    b.Property<int?>("AreaID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(150)
+                        .HasColumnType("VarChar");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(50)
+                        .HasColumnType("VarChar");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(300)
+                        .HasColumnType("VarChar");
+
+                    b.Property<int?>("LawTypesID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(150)
+                        .HasColumnType("VarChar");
+
+                    b.HasKey("PracticeAreaID");
+
+                    b.HasIndex("AreaID");
+
+                    b.HasIndex("LawTypesID");
+
+                    b.ToTable("PracticeAreas");
+                });
+
+            modelBuilder.Entity("HUKUK_PROJE.Entities.Area", b =>
+                {
+                    b.HasOne("HUKUK_PROJE.Entities.LawTypes", "LawTypes")
+                        .WithMany()
+                        .HasForeignKey("LawTypesID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("LawTypes");
+                });
+
             modelBuilder.Entity("HUKUK_PROJE.Entities.Contact", b =>
                 {
                     b.HasOne("HUKUK_PROJE.Entities.LawTypes", "LawTypes")
@@ -532,6 +618,23 @@ namespace HUKUKPROJE.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PracticeArea", b =>
+                {
+                    b.HasOne("HUKUK_PROJE.Entities.Area", "Area")
+                        .WithMany()
+                        .HasForeignKey("AreaID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HUKUK_PROJE.Entities.LawTypes", "LawTypes")
+                        .WithMany()
+                        .HasForeignKey("LawTypesID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Area");
+
+                    b.Navigation("LawTypes");
                 });
 #pragma warning restore 612, 618
         }

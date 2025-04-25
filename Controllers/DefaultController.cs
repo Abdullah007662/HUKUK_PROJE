@@ -24,28 +24,9 @@ namespace HUKUK_PROJE.Controllers
         [HttpPost]
         public IActionResult Create([FromForm] Contact model)
         {
-            List<SelectListItem> Type = _hukukContext.LawTypes
-                .Select(x => new SelectListItem
-                {
-                    Text = x.Type,
-                    Value = x.LawTypesID.ToString()
-                }).ToList();
-            ViewBag.v1 = Type;
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(new { message = "Lütfen tüm alanları doldurunuz!" });
-            }
-
-            // Aynı gün ve saat için başka randevu var mı kontrolü
-            bool isSlotTaken = _hukukContext.Contacts.Any(x =>
-                x.AppointmentDate == model.AppointmentDate &&
-                x.AppointmentTime == model.AppointmentTime
-            );
-
-            if (isSlotTaken)
-            {
-                return Conflict(new { message = "Bu tarih ve saat için zaten bir randevu alınmış. Lütfen başka bir zaman seçiniz." });
             }
 
             Contact newAppointment = new Contact
@@ -53,8 +34,6 @@ namespace HUKUK_PROJE.Controllers
                 NameSurname = model.NameSurname,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
-                AppointmentDate = model.AppointmentDate,
-                AppointmentTime = model.AppointmentTime,
                 Message = model.Message,
                 LawTypes = _hukukContext.LawTypes.FirstOrDefault(x => x.LawTypesID == model.LawTypes!.LawTypesID)
             };
@@ -75,9 +54,7 @@ namespace HUKUK_PROJE.Controllers
                 var bodyBuilder = new BodyBuilder
                 {
                     TextBody = $"Merhaba {model.NameSurname},\n\n" +
-                               $"Randevu talebiniz alınmıştır.\n\n" +
-                               $"Tarih: {model.AppointmentDate:dd/MM/yyyy}\n" +
-                               $"Saat: {model.AppointmentTime}\n\n" +
+                               $"Randevu talebiniz oluşturulmuştur.\n\n" +
                                $"Seçtiğiniz Kategori: {selectedCategory}\n\n" +
                                $"Detaylar için bizimle iletişime geçebilirsiniz."
                 };
@@ -92,15 +69,14 @@ namespace HUKUK_PROJE.Controllers
                     client.Disconnect(true);
                 }
 
-                return Ok();
+                // ✅ Redirect URL'yi dön
+                return Ok(new { redirectUrl = Url.Action("Index", "Default") });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = $"Mail gönderilirken hata oluştu: {ex.Message}" });
             }
         }
-
-
 
         public IActionResult Index()
         {
@@ -110,23 +86,13 @@ namespace HUKUK_PROJE.Controllers
                     Text = x.Type,
                     Value = x.LawTypesID.ToString()
                 }).ToList();
-            var banner1 = _hukukContext.Banners.FirstOrDefault(x => x.BannerID == 1); 
+            var banner1 = _hukukContext.Banners.FirstOrDefault(x => x.BannerID == 1);
             var banner2 = _hukukContext.Banners.FirstOrDefault(x => x.BannerID == 2);
 
             ViewBag.Banner1Image = banner1?.ImageUrl ?? "img/banner/default1.jpg";
             ViewBag.Banner2Image = banner2?.ImageUrl ?? "img/banner/default2.jpg";
 
             return View();
-        }
-        [HttpGet]
-        public IActionResult GetUnavailableTimes(DateTime date)
-        {
-            var unavailableTimes = _hukukContext.Contacts
-                .Where(c => c.AppointmentDate == date)
-                .Select(c => c.AppointmentTime.ToString(@"hh\:mm")) // Saatleri HH:mm formatında al
-                .ToList();
-
-            return Json(unavailableTimes);
         }
 
     }

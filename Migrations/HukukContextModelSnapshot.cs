@@ -48,7 +48,7 @@ namespace HUKUKPROJE.Migrations
 
                     b.HasKey("AboutID");
 
-                    b.ToTable("Abouts");
+                    b.ToTable("Abouts", (string)null);
                 });
 
             modelBuilder.Entity("HUKUK_PROJE.Entities.Admin", b =>
@@ -261,21 +261,15 @@ namespace HUKUKPROJE.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContactID"));
 
-                    b.Property<DateTime>("AppointmentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<TimeSpan>("AppointmentTime")
-                        .HasColumnType("time");
-
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<int?>("LawTypesID")
                         .HasColumnType("int");
 
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -286,63 +280,14 @@ namespace HUKUKPROJE.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.HasKey("ContactID");
 
                     b.HasIndex("LawTypesID");
 
                     b.ToTable("Contacts");
-                });
-
-            modelBuilder.Entity("HUKUK_PROJE.Entities.Deneme", b =>
-                {
-                    b.Property<int>("DenemeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DenemeId"));
-
-                    b.Property<int>("Name")
-                        .HasColumnType("int");
-
-                    b.HasKey("DenemeId");
-
-                    b.ToTable("Denemes");
-                });
-
-            modelBuilder.Entity("HUKUK_PROJE.Entities.Employee", b =>
-                {
-                    b.Property<int>("EmployeeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeID"));
-
-                    b.Property<string>("Department")
-                        .HasMaxLength(30)
-                        .HasColumnType("VarChar");
-
-                    b.Property<string>("FacebookUrl")
-                        .HasMaxLength(150)
-                        .HasColumnType("VarChar");
-
-                    b.Property<string>("InstagramUrl")
-                        .HasMaxLength(200)
-                        .HasColumnType("VarChar");
-
-                    b.Property<string>("NameSurname")
-                        .HasMaxLength(25)
-                        .HasColumnType("VarChar");
-
-                    b.Property<string>("TwitterUrl")
-                        .HasMaxLength(150)
-                        .HasColumnType("VarChar");
-
-                    b.HasKey("EmployeeID");
-
-                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("HUKUK_PROJE.Entities.LawTypes", b =>
@@ -385,31 +330,6 @@ namespace HUKUKPROJE.Migrations
                     b.HasKey("ServiceID");
 
                     b.ToTable("Services");
-                });
-
-            modelBuilder.Entity("HUKUK_PROJE.Entities.Testimonial", b =>
-                {
-                    b.Property<int>("TestimonialID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestimonialID"));
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("VarChar");
-
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(300)
-                        .HasColumnType("VarChar");
-
-                    b.Property<string>("NameSurname")
-                        .HasMaxLength(30)
-                        .HasColumnType("VarChar");
-
-                    b.HasKey("TestimonialID");
-
-                    b.ToTable("Testimonials");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

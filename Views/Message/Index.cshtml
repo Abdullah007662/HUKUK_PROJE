@@ -36,10 +36,6 @@
                                 <tr>
                                     <td>@item.NameSurname</td>
                                     <td>@item.PhoneNumber</td>
-                                    <td data-order="@item.AppointmentDate.ToString("yyyyMMdd")">
-                                    @item.AppointmentDate.ToString("dd - MMMM - yyyy")
-                                    </td>
-                                    <td>@item.AppointmentTime.ToString(@"hh\:mm")</td>
                                     <td>@(item.LawTypes != null ? item.LawTypes.Type : "Bilinmiyor")</td>
                                     <td><a href="/Message/Details/@item.ContactID" class="btn btn-primary">Detaylar</a></td>
                                     <td>

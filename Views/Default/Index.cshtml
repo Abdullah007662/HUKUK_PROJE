@@ -11,6 +11,7 @@
 <head>
     @await Component.InvokeAsync("_HeadPartials")
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         .slider_bg_1 {
             background-image: url('@Url.Content(ViewBag.Banner1Image)');
@@ -57,12 +58,33 @@
     <br />
     @await Component.InvokeAsync("_AboutPartials")
     @await Component.InvokeAsync("_ServicePartials")
+<h3 id="colorful-heading" style="
+    text-align: center;
+    font-weight: bold;
+    font-size: 36px;
+    text-transform: uppercase;
+    margin: 40px 0;
+">
+    İLETİŞİM
+</h3>
+
+<script>
+    const heading = document.getElementById("colorful-heading");
+    const colors = ["#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6", "#1abc9c"];
+    let index = 0;
+
+    setInterval(() => {
+        heading.style.color = colors[index];
+        index = (index + 1) % colors.length;
+    }, 2000); // Her 2 saniyede bir renk değiştirir
+</script>
+
 
     <div class="appointment_area">
         <div class="container">
             <div class="appointment_container">
                 <div class="appointment_form">
-                    <h3><strong>Randevu Al</strong></h3>
+                    <h3 id="animated-heading" style="text-align: center;font-size: 30px;margin-bottom: 20px;"><strong>Size Ulaşalım</strong></h3>
                     <br />
                     <form id="appointmentForm" method="post" asp-controller="Default" asp-action="Create">
                         <div class="row">
@@ -74,14 +96,6 @@
                             </div>
                             <div class="col-xl-6 col-md-6 mb-3">
                                 <input type="text" id="phoneNumber" name="PhoneNumber" asp-for="PhoneNumber" placeholder="Telefon Numarası" required class="form-control" />
-                            </div>
-                            <div class="col-xl-6 col-md-6 mb-3">
-                                <input type="date" id="appointmentDate" name="AppointmentDate" asp-for="AppointmentDate" required class="form-control" />
-                            </div>
-                            <div class="col-xl-6 col-md-6 mb-3">
-                                <select id="appointmentTime" name="AppointmentTime" class="form-control" required>
-                                    <option value="">Saat seçiniz</option>
-                                </select>
                             </div>
                             <div class="col-xl-6 col-md-6 mb-3">
                                 <select id="lawType" asp-for="LawTypes!.LawTypesID" class="form-control" required>
@@ -100,6 +114,7 @@
                             </div>
                         </div>
                     </form>
+
                 </div>
 
                 <div class="map_container">
@@ -114,40 +129,14 @@
     @await Component.InvokeAsync("_ScriptPartials")
 
     <script>
-        const today = new Date().toISOString().split('T')[0];
-        const appointmentDate = document.getElementById("appointmentDate");
-        const appointmentTime = document.getElementById("appointmentTime");
+            const heading = document.getElementById("colorful-heading");
+    const colors = ["#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6", "#1abc9c"];
+    let index = 0;
 
-        appointmentDate.setAttribute("min", today);
-
-        appointmentDate.addEventListener("change", function () {
-            const selectedDate = this.value;
-
-            fetch(`/Default/GetUnavailableTimes?date=${selectedDate}`)
-                .then(response => response.json())
-                .then(unavailableTimes => {
-                    appointmentTime.innerHTML = '<option value="">Saat seçiniz</option>';
-
-                    for (let hour = 10; hour <= 17; hour++) {
-                        for (let min = 0; min <= 30; min += 30) {
-                            const h = hour.toString().padStart(2, '0');
-                            const m = min.toString().padStart(2, '0');
-                            const timeStr = `${h}:${m}`;
-
-                            const option = document.createElement("option");
-                            option.value = timeStr;
-                            option.textContent = timeStr;
-
-                            if (unavailableTimes.includes(timeStr)) {
-                                option.disabled = true;
-                                option.textContent += " (Dolu)";
-                            }
-
-                            appointmentTime.appendChild(option);
-                        }
-                    }
-                });
-        });
+    setInterval(() => {
+        heading.style.color = colors[index];
+        index = (index + 1) % colors.length;
+    }, 2000); // Her 2 saniyede bir renk değiştirir
 
         document.getElementById("appointmentForm").addEventListener("submit", function (event) {
             event.preventDefault();
@@ -165,17 +154,6 @@
                 return;
             }
 
-            const selectedTime = appointmentTime.value;
-            if (!selectedTime || selectedTime < "10:00" || selectedTime > "17:30") {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Geçersiz Saat',
-                    text: 'Lütfen 10:00 ile 17:30 saatleri arasında bir saat seçiniz.',
-                    confirmButtonText: 'Tamam'
-                });
-                return;
-            }
-
             const formData = new FormData(event.target);
 
             fetch('/Default/Create', {
@@ -183,45 +161,38 @@
                 body: formData
             })
                 .then(response => {
-                    if (response.status === 409) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Zaman Dilimi Dolu!',
-                            text: 'Bu tarih ve saat için zaten bir randevu alınmış. Lütfen başka bir zaman seçiniz.',
-                            confirmButtonText: 'Tamam'
-                        });
-                        return;
+                    if (!response.ok) {
+                        throw new Error("İşlem başarısız");
                     }
-
-                    if (response.ok) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Randevunuz oluşturuldu!',
-                            text: 'Randevunuz başarıyla kaydedildi ve e-posta gönderildi.',
-                            confirmButtonText: 'Tamam'
-                        }).then(() => {
-                            event.target.reset();
-                            appointmentTime.innerHTML = '<option value="">Saat seçiniz</option>';
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Hata!',
-                            text: 'Randevu oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.',
-                            confirmButtonText: 'Tamam'
-                        });
-                    }
+                    return response.json();
                 })
-                .catch(error => {
+                .then(() => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Randevunuz oluşturuldu!',
+                        text: 'Randevunuz başarıyla kaydedildi ve e-posta gönderildi.',
+                        confirmButtonText: 'Tamam'
+                    }).then(() => {
+                        event.target.reset(); // Formu temizle
+                        document.querySelector(".appointment_form").scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        }); // Form alanına kaydır
+                    });
+                })
+                .catch(() => {
                     Swal.fire({
                         icon: 'error',
                         title: 'Hata!',
-                        text: 'Bir hata oluştu. Lütfen tekrar deneyin.',
+                        text: 'Randevu oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.',
                         confirmButtonText: 'Tamam'
                     });
                 });
         });
     </script>
+
+
+
 
 </body>
 </html>
